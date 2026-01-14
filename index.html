@@ -3,1325 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Masooma's &mdash; Precision Physiotherapy</title>
-   
+    <meta name="description" content="Dr. Masooma's - Elite Physiotherapy and Human Performance Clinic. Expert motion and precision recovery.">
+    <title>Dr. Masooma's | Expert Motion & Precision Recovery</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
-    <!-- PRELOADER FONT -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <style type="text/css">
-        /* --- BRAND COLOR TOKENS --- */
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
         :root {
-            --primary-green: #589a31;
-            --deep-forest: #2C5E1A;
-            --electric-lime: #a3ff47;
-            --premium-plum: #2D2331;
-            --vitality-gradient: linear-gradient(135deg, #a3ff47 0%, #589a31 50%, #2C5E1A 100%);
-            --off-white: #F4F7F2;
-            --glass-border: rgba(88, 154, 49, 0.25);
+            --color-primary: #589a31;
+            --color-primary-dark: #2C5E1A;
+            --color-accent: #a3ff47;
+            --color-plum: #2D2331;
+            --color-white: #ffffff;
+            --color-bg: #0a0a0a;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --transition-main: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --nav-height: 64px;
         }
-        /* --- SETUP --- */
+
+        /* --- Reset & Base --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--off-white);
-            color: var(--premium-plum);
+            background-color: var(--color-bg);
+            color: var(--color-white);
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
-            width: 100%;
         }
-        /* Lenis Smooth Scroll */
-        html.lenis, html.lenis body { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto !important; }
-        /* --- NAVIGATION --- */
-        header.site-nav {
+
+        /* --- Navigation --- */
+        .header {
             position: fixed;
-            top: 20px;
+            top: 1rem;
             left: 50%;
             transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 1400px;
+            width: 90%;
+            max-width: 1200px;
+            height: var(--nav-height);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 100px;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-radius: 50px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 40px rgba(45, 35, 49, 0.1);
-            transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.6s ease;
-            overflow: hidden;
-            height: 70px;
-        }
-        header.site-nav.scrolled { top: 10px; border-color: var(--electric-lime); }
-        .nav-container { width: 100%; padding: 0 40px; position: relative; }
-        .nav-main-tier { display: flex; justify-content: space-between; align-items: center; height: 70px; width: 100%; }
-       
-        .logo {
-            font-size: 1.1rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            background: var(--vitality-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-        }
-        .burger { display: none; cursor: pointer; font-size: 1.5rem; }
-        .nav-links { display: flex; gap: 40px; list-style: none; align-items: center; }
-        .nav-links a {
-            text-decoration: none;
-            color: var(--premium-plum);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: 0.3s;
-            opacity: 0.6;
-            padding: 25px 0;
-            display: block;
-        }
-        .nav-links li:hover > a { opacity: 1; color: var(--primary-green); }
-        .nav-sub-tier-wrapper { position: relative; width: 100%; height: 70px; pointer-events: none; }
-        .nav-sub-tier {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            border-top: 1px solid rgba(136, 201, 71, 0.1);
-            opacity: 0;
-            visibility: hidden;
-        }
-        .nav-sub-tier.active { display: flex; visibility: visible; pointer-events: all; }
-        .sub-menu-list { display: flex; gap: 40px; list-style: none; }
-        .sub-menu-item a { color: var(--premium-plum); font-size: 0.65rem; font-weight: 700; opacity: 0.5; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; }
-        .sub-menu-item:hover a { opacity: 1; color: var(--primary-green); }
-        /* --- HERO --- */
-        .hero-section { position: relative; height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #000; z-index: 1; }
-        #liquid-canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.85; }
-        .hero-section::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(180deg, rgba(45,35,49,0.4) 0%, transparent 50%, rgba(45,35,49,0.3) 100%);
-            z-index: 2; pointer-events: none;
-        }
-        .hero-slides-wrapper { position: relative; z-index: 10; max-width: 1600px; width: 100%; height: 100%; padding: 0 60px; }
-        .hero-slide { position: absolute; top: 0; left: 60px; right: 60px; height: 100%; display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10vh; opacity: 0; visibility: hidden; pointer-events: none; }
-        .hero-slide.active { opacity: 1; visibility: visible; pointer-events: all; }
-       
-        .hero-title {
-            font-size: clamp(3rem, 10vw, 8.5rem);
-            font-weight: 400;
-            line-height: 0.85;
-            letter-spacing: -0.04em;
-            color: #fff;
-            text-shadow: 0 10px 40px rgba(0,0,0,0.4);
-        }
-        .hero-aside { max-width: 400px; text-align: right; }
-        .hero-aside p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; font-weight: 300; color: #fff; opacity: 0; }
-       
-        /* --- WHO WE HELP (CLINICAL ACCORDION) --- */
-        .accordion-section {
-            padding: 150px 80px;
-            background-color: var(--off-white);
-            min-height: 100vh;
             display: flex;
             align-items: center;
-            position: relative;
-            z-index: 5;
+            padding: 0 1.5rem;
+            border: 1px solid rgba(88, 154, 49, 0.2);
+            transition: var(--transition-main);
         }
-        .accordion-container {
-            max-width: 1400px;
-            width: 100%;
-            margin: 0 auto;
-            display: flex;
-            gap: 80px;
-            align-items: flex-start;
-        }
-        .accordion-left {
-            width: 50%;
-        }
-        .accordion-header-block {
-            margin-bottom: 60px;
-        }
-        .accordion-list {
-            display: flex;
-            flex-direction: column;
-        }
-        .accordion-item {
-            border-top: 1px solid rgba(45, 35, 49, 0.15);
-            cursor: pointer;
-            position: relative;
-            transition: background-color 0.3s ease;
-        }
-        .accordion-item:last-child {
-            border-bottom: 1px solid rgba(45, 35, 49, 0.15);
-        }
-        .acc-head {
-            padding: 30px 0;
+
+        .nav-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        .acc-title {
-            font-size: clamp(1.5rem, 3vw, 2rem);
-            font-weight: 400;
-            color: var(--premium-plum);
-            transition: color 0.3s;
-            margin: 0;
-        }
-        .acc-icon {
-            font-size: 1.5rem;
-            transition: transform 0.3s;
-            color: rgba(45, 35, 49, 0.3);
-        }
-        .acc-body {
-            height: 0;
-            overflow: hidden;
-            opacity: 0;
-        }
-        .acc-content-inner {
-            padding-bottom: 30px;
-            font-size: 1.1rem;
-            color: #555;
-            line-height: 1.6;
-            max-width: 90%;
-        }
-        /* Active Accordion States */
-        .accordion-item.active .acc-title {
-            color: var(--primary-green);
-            font-weight: 600;
-        }
-        .accordion-item.active .acc-icon {
-            transform: rotate(45deg);
-            color: var(--primary-green);
+            width: 100%;
         }
 
-        /* Right Side Image Stacking */
-        .accordion-right {
-            width: 50%;
-            height: 70vh;
-            position: sticky;
-            top: 15vh;
-            border-radius: 40px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 40px 100px rgba(45, 35, 49, 0.1);
+        .logo {
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
         }
-        .acc-img-wrapper {
-            position: relative;
+
+        /* Desktop Nav - Hidden on Mobile */
+        .nav-links {
+            display: none;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-plum);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { opacity: 1; color: var(--color-primary); }
+
+        /* Mobile Menu Trigger */
+        .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 2px;
+            background: var(--color-plum);
+            transition: 0.3s;
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 100%;
-            background: #fff;
+            height: 100dvh;
+            background: var(--color-white);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            padding: 8rem 2rem 2rem;
+            transform: translateY(-100%);
+            transition: var(--transition-main);
         }
-        .acc-img {
+
+        .mobile-nav.active { transform: translateY(0); }
+
+        .mobile-nav a {
+            color: var(--color-plum);
+            text-decoration: none;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            position: relative;
+            height: 100dvh;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 4rem;
+        }
+
+        /* Visual Background */
+        .hero-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            z-index: -1;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            opacity: 0;
-            transform: scale(1.1);
-            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 1;
-        }
-        .acc-img.active {
-            opacity: 1;
-            transform: scale(1);
-            z-index: 2;
+            filter: brightness(0.6);
         }
 
-        /* --- HORIZONTAL GALLERY --- */
-        .horizontal-section { position: relative; width: 100%; height: 100vh; overflow: hidden; background-color: var(--premium-plum); z-index: 10; }
-        .horizontal-track { display: flex; height: 100%; width: fit-content; align-items: center; padding: 0 10vw; }
-        .horizontal-intro { min-width: 40vw; padding-right: 5vw; }
-        .horizontal-intro h2 { font-size: 4.5rem; font-weight: 400; letter-spacing: -3px; line-height: 1; color: #fff; }
-        .horizontal-intro .green-accent { color: var(--electric-lime); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 4px; font-weight: 800; display: block; margin-bottom: 20px; }
-        .horizontal-card { min-width: 500px; height: 60vh; margin-right: 80px; position: relative; border-radius: 40px; overflow: hidden; border: 1px solid rgba(163, 255, 71, 0.3); transform: scale(0.9); opacity: 0; filter: blur(20px); }
-        .horizontal-card img { width: 120%; height: 100%; object-fit: cover; filter: brightness(0.85); position: absolute; left: -10%; top: 0; loading: lazy; }
-        .card-content { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px; background: linear-gradient(0deg, var(--premium-plum) 0%, transparent 100%); color: white; }
-        /* --- IMPACT METRICS --- */
-        .metrics-section { padding: 150px 80px; background-color: var(--off-white); position: relative; z-index: 5; }
-        .metrics-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-        .metric-card { padding: 50px; border-left: 3px solid var(--electric-lime); background: #fff; border-radius: 0 30px 30px 0; transform: translateY(40px); opacity: 0; }
-        .metric-value { font-family: monospace; font-size: 5.5rem; font-weight: 800; color: var(--premium-plum); letter-spacing: -5px; }
-       
-        /* --- INNOVATION SECTION STYLES --- */
-        .premium-about-section {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f172a; 
-            color: #f8fafc;
-            position: relative;
-            overflow: hidden;
-            padding: 150px 80px;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            align-items: center;
-            z-index: 8;
-        }
-
-        /* Background Blobs */
-        .about-blob {
-            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3;
-            animation: blobFloat 20s infinite ease-in-out alternate; z-index: 0;
-        }
-        .ab-1 { width: 600px; height: 600px; background: #1e1b4b; top: -10%; right: -10%; }
-        .ab-2 { width: 500px; height: 500px; background: #312e81; bottom: -10%; left: -10%; animation-delay: -5s; }
-        @keyframes blobFloat { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
-
-        /* Container & Layout */
-        .about-container { 
-            max-width: 1400px; 
-            width: 100%; 
-            position: relative; 
-            z-index: 2;
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            gap: 60px; 
-        }
-
-        /* Left Text Content */
-        .about-content { width: 45%; }
-        .about-content .about-title, .about-content .about-desc { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .about-content.about-visible .about-title { opacity: 1; transform: translateY(0); transition-delay: 0s; }
-        .about-content.about-visible .about-desc { opacity: 1; transform: translateY(0); transition-delay: 0.15s; }
-       
-        .about-title { font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 30px; color: #ffffff; letter-spacing: -0.03em; }
-        .highlight-text { background: linear-gradient(90deg, #3b82f6, #a855f7, #ec4899, #3b82f6); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: gradientMove 4s linear infinite; }
-        @keyframes gradientMove { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
-        .about-desc { font-size: 1.1rem; line-height: 1.7; color: #cbd5e1; font-weight: 400; }
-
-        /* Right Side: Carousel */
-        .about-carousel-column {
-            width: 50%;
-            height: 500px;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Carousel 3D Styles */
-        .coverflow-scope {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: transparent;
-            perspective: 1000px;
-            overflow: visible;
-        }
-
-        .stage {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .actor {
+        .hero-overlay {
             position: absolute;
-            width: 260px;
-            height: 360px;
-            will-change: transform;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s, z-index 0.6s;
-            cursor: pointer;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, transparent 60%);
         }
 
-        .tilt-frame {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.1); 
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px);
-            -webkit-box-reflect: below 0px linear-gradient(transparent, transparent 20%, rgba(255,255,255,0.2));
-            transform-style: preserve-3d;
-            will-change: transform;
+        .hero-content {
+            width: 90%;
+            margin: 0 auto;
+            max-width: 1200px;
+            z-index: 2;
         }
 
-        .tilt-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            pointer-events: none;
-            display: block;
-            border-radius: 20px;
-            transform: scale(1.01);
+        .hero-title {
+            font-size: clamp(3rem, 12vw, 8rem);
+            line-height: 0.9;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
         }
 
-        .tilt-frame::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: black; border-radius: 20px; opacity: 0; transition: opacity 0.6s;
-            z-index: 3; pointer-events: none;
-        }
-       
-        .actor.side-card .tilt-frame::after { opacity: 0.5; }
-        .actor.side-card .tilt-frame { transform: none !important; backdrop-filter: none; -webkit-backdrop-filter: none; -webkit-box-reflect: unset; }
-
-        @media (max-width: 1024px) { 
-            .about-container { flex-direction: column; gap: 50px; } 
-            .about-content, .about-carousel-column { width: 100%; } 
-            .about-carousel-column { height: 400px; order: 1; } 
-            .about-content { order: 2; text-align: center; } 
-           
-            /* Accordion Mobile */
-            .accordion-container { flex-direction: column-reverse; gap: 40px; }
-            .accordion-left, .accordion-right { width: 100%; }
-            .accordion-right { height: 40vh; position: relative; top: 0; }
+        .hero-desc {
+            max-width: 450px;
+            font-size: 1rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 2rem;
         }
 
-        @media (max-width: 768px) {
-            header.site-nav { padding: 0 20px; top: 10px; height: 60px; width: calc(100% - 20px); }
-            .nav-main-tier { justify-content: space-between; }
-            .burger { display: block; }
-            .nav-links { display: none; flex-direction: column; gap: 20px; position: absolute; top: 70px; left: 0; width: 100%; background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 0 0 20px 20px; }
-            .nav-links.active { display: flex; }
-            .nav-links a { padding: 10px 0; }
-            .horizontal-section { height: auto; }
-            .horizontal-track { flex-direction: column; width: 100%; padding: 20px; }
-            .horizontal-card { min-width: auto; width: 100%; margin-right: 0; margin-bottom: 40px; height: 40vh; }
-            .metrics-container { grid-template-columns: 1fr; }
-            .profile-container { flex-direction: column; }
-            .profile-text-side, .profile-image-wrapper { width: 100%; }
-            .journey-step { flex-direction: column; gap: 20px; }
-            .step-content { width: 100%; }
-            .step-indicator { position: static; margin: 0 auto; }
-            .sticky-scroll-container { flex-direction: column; }
-            .sticky-left { width: 100%; height: auto; position: relative; }
-            .scrolling-right { width: 100%; }
-           
-            .premium-about-section { min-height: auto; padding: 80px 20px; }
-            .actor { width: 220px; height: 320px; }
+        /* Buttons */
+        .cta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
-            .tilt-frame {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-                -webkit-box-reflect: unset !important;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.5) !important;
-                background: rgba(30, 41, 59, 0.9) !important;
-                border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.75rem;
+            transition: var(--transition-main);
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: var(--color-white);
+            box-shadow: 0 10px 30px rgba(88, 154, 49, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-accent);
+            color: var(--color-plum);
+            transform: translateY(-3px);
+        }
+
+        /* --- Media Queries --- */
+
+        /* Tablet (≥768px) */
+        @media (min-width: 768px) {
+            .cta-group { flex-direction: row; }
+            .hero-desc { font-size: 1.15rem; }
+            .header { width: 95%; padding: 0 2.5rem; }
+        }
+
+        /* Desktop (≥1024px) */
+        @media (min-width: 1024px) {
+            .nav-links { display: flex; }
+            .menu-toggle { display: none; }
+            .hero-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
             }
-        }
-
-        /* --- PROFILE (Science Behind Practice) --- */
-        .profile-section { padding: 150px 80px; background-color: #fff; position: relative; z-index: 10; }
-        .profile-container { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; gap: 100px; }
-        .profile-text-side { width: 50%; }
-        .profile-heading { font-size: 4rem; line-height: 1; margin-bottom: 40px; letter-spacing: -3px; color: var(--premium-plum); }
-        .profile-image-wrapper { width: 50%; height: 80vh; border-radius: 40px; overflow: hidden; box-shadow: 0 40px 100px rgba(45, 35, 49, 0.2); }
-        .profile-image-wrapper img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); loading: lazy; }
-        /* --- PATIENT JOURNEY --- */
-        .journey-section { padding: 150px 80px; background: var(--off-white); position: relative; z-index: 10; border-top: 1px solid rgba(0,0,0,0.05); }
-        .journey-header { text-align: center; margin-bottom: 120px; }
-        .journey-container { max-width: 1400px; margin: 0 auto; position: relative; display: flex; flex-direction: column; gap: 140px; }
-        .journey-path-svg { position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 4px; height: 100%; overflow: visible; z-index: 1; }
-        .journey-step { display: flex; justify-content: space-between; align-items: center; width: 100%; position: relative; z-index: 2; }
-        .journey-step:nth-child(even) { flex-direction: row-reverse; }
-        .step-content { width: 44%; padding: 60px; background: #fff; border-radius: 40px; border: 1px solid var(--glass-border); opacity: 0; transform: translateY(50px); position: relative; z-index: 5; box-shadow: 0 30px 60px rgba(0,0,0,0.03); }
-        .step-indicator { width: 68px; height: 68px; background: #fff; border: 3px solid var(--electric-lime); border-radius: 50%; position: absolute; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; align-items: center; justify-content: center; }
-        .step-dot { width: 20px; height: 20px; background: var(--vitality-gradient); border-radius: 50%; opacity: 0; transform: scale(0); }
-        /* --- STICKY FOUNDATIONS --- */
-        .sticky-scroll-container { display: flex; width: 100%; background-color: var(--premium-plum); position: relative; z-index: 15; }
-        .sticky-left { width: 45%; height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 80px; background: var(--premium-plum); }
-        .sticky-left h2 { color: #fff; font-size: 4.5rem; letter-spacing: -3px; line-height: 0.9; }
-        .sticky-pre { background: var(--vitality-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 25px; display: inline-block; }
-        .scrolling-right { width: 55%; padding: 150px 80px; position: relative; z-index: 2; }
-        .scroll-item { margin-bottom: 300px; width: 100%; opacity: 0.1; transform: scale(0.9); filter: grayscale(1) blur(20px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
-        .scroll-item.is-active { opacity: 1; transform: scale(1); filter: grayscale(0) blur(0px); }
-        .scroll-image-wrap { width: 100%; aspect-ratio: 4 / 5; border-radius: 40px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
-        .scroll-image-wrap img { width: 100%; height: 100%; object-fit: cover; loading: lazy; }
-        .scroll-caption { font-size: 1.4rem; font-weight: 700; color: #fff; margin-top: 30px; display: flex; align-items: center; gap: 20px; }
-        /* --- CLINICAL SPECIALIZATIONS (Expertise) --- */
-        .portfolio-section { max-width: 100%; padding: 150px 80px; background: #fff; position: relative; z-index: 20; display: block; border-top: 1px solid rgba(0,0,0,0.05); }
-        .portfolio-container-inner { max-width: 1400px; margin: 0 auto; }
-        .portfolio-header { margin-bottom: 100px; }
-        .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 100px 50px; width: 100%; }
-        .project-card { text-decoration: none; color: inherit; display: block; opacity: 0; transform: translateY(60px); }
-        .image-wrapper { width: 100%; aspect-ratio: 16 / 10; border-radius: 40px; overflow: hidden; box-shadow: 0 40px 80px rgba(45, 35, 49, 0.1); border: 1px solid var(--glass-border); margin-bottom: 35px; }
-        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 1s ease; loading: lazy; }
-        .project-card:hover .image-wrapper img { transform: scale(1.05); }
-        /* --- TEETH REVEAL --- */
-        .reveal-section { position: relative; width: 100%; height: 100vh; overflow: hidden; background: #000; z-index: 25; }
-        .reveal-clinic-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; loading: lazy; }
-        .tooth { position: absolute; left: 0; width: 100%; height: 50.5%; background-color: var(--premium-plum); z-index: 2; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .tooth-top { top: 0; align-items: flex-end; }
-        .tooth-bottom { bottom: 0; align-items: flex-start; }
-        .reveal-text-fixed { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; text-align: center; pointer-events: none; width: 100%; }
-        .reveal-text-fixed h2 { font-size: clamp(3rem, 8vw, 8rem); color: #fff; text-transform: uppercase; font-weight: 800; letter-spacing: 15px; text-shadow: 0 10px 50px rgba(0,0,0,0.5); }
-        /* --- TESTIMONIALS --- */
-        .testimonial-section { position: relative; height: 100vh; width: 100%; overflow: hidden; background-color: var(--premium-plum); display: flex; align-items: center; justify-content: center; z-index: 30; }
-        .testimonial-bg { position: absolute; top: 0; left: 0; width: 100%; height: 130%; background-image: linear-gradient(rgba(45,35,49,0.9), rgba(45,35,49,0.9)), url('https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=2000&auto=format&fit=crop'); background-size: cover; z-index: 1; }
-        .testimonial-content { position: relative; z-index: 2; max-width: 1200px; padding: 80px; text-align: center; }
-        .testimonial-quote { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 5rem); color: #fff; font-style: italic; letter-spacing: -1px; opacity: 0; filter: blur(20px); transform: scale(0.95); }
-        .testimonial-author { color: var(--electric-lime); font-size: 1rem; text-transform: uppercase; letter-spacing: 8px; font-weight: 900; display: block; margin-top: 40px; opacity: 0; transform: translateY(20px); }
-        /* --- BUTTONS --- */
-        .btn { text-decoration: none; padding: 20px 45px; border-radius: 60px; font-size: 0.85rem; font-weight: 800; display: inline-flex; align-items: center; gap: 15px; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid transparent; letter-spacing: 2px; text-transform: uppercase; }
-        .btn-dark { background: var(--vitality-gradient); color: #fff; box-shadow: 0 15px 35px rgba(88, 154, 49, 0.4); }
-        .btn-dark.nav-item { padding: 10px 20px; font-size: 0.7rem; }
-        .dot { width: 12px; height: 12px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px #fff; }
-        /* Focus Styles for Accessibility */
-        a:focus, button:focus { outline: 2px solid var(--electric-lime); outline-offset: 2px; }
-        /* Reduced Motion */
-        @media (prefers-reduced-motion: reduce) {
-            * { transition: none !important; animation: none !important; }
-        }
-
-        /* --- PRELOADER STYLES --- */
-        #preloader-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #1A2F25; z-index: 9999;
-            font-family: 'Montserrat', sans-serif;
-            transition: opacity 1s ease-out, visibility 1s;
-        }
-        #preloader-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        #subtitle-container {
-            position: absolute; top: 85%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 2; text-align: center; opacity: 0; width: 100%; pointer-events: none;
-        }
-        .subtitle {
-            font-size: 1.1rem; letter-spacing: 0.2em; text-transform: uppercase;
-            color: #E8F5E9; margin-bottom: 15px; font-family: 'Montserrat', sans-serif;
-        }
-        .pre-highlight { color: #98D8A1; font-weight: 600; }
-        .progress-line { width: 0%; height: 2px; background: #98D8A1; margin: 0 auto; }
-        #loader-text {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: #98D8A1; font-size: 0.8rem; opacity: 0.5; transition: opacity 0.5s;
-            font-family: 'Montserrat', sans-serif; z-index: 5;
+            .hero-desc-wrapper {
+                text-align: right;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+            }
+            .hero-title { margin-bottom: 0; }
         }
     </style>
 </head>
 <body>
-    <!-- PRELOADER HTML -->
-    <div id="preloader-overlay">
-        <div id="loader-text">Loading Experience...</div>
-        <div id="preloader-canvas"></div>
-        <div id="subtitle-container">
-            <div class="subtitle">Healing with <span class="pre-highlight">Precision</span> and <span class="pre-highlight">Care</span></div>
-            <div class="progress-line"></div>
-        </div>
-    </div>
 
-    <header class="site-nav" id="main-header" role="navigation">
-        <div class="nav-container">
-            <div class="nav-main-tier">
-                <div class="logo">Dr. Masooma's</div>
-                <div class="burger" aria-label="Toggle Menu">&#9776;</div>
-                <ul class="nav-links">
-                    <li class="menu-trigger" data-target="performance-menu"><a href="javascript:void(0);" class="nav-item">Performance</a></li>
-                    <li class="menu-trigger" data-target="recovery-menu"><a href="javascript:void(0);" class="nav-item">Recovery</a></li>
-                    <li class="menu-trigger" data-target="clinic-menu"><a href="javascript:void(0);" class="nav-item">The Clinic</a></li>
-                    <li class="menu-trigger" data-target="contact-menu"><a href="javascript:void(0);" class="nav-item">Contact</a></li>
-                </ul>
-                <a href="javascript:void(0);" class="btn btn-dark magnetic nav-item" aria-label="Book Now">Book Now</a>
-            </div>
-            <div class="nav-sub-tier-wrapper">
-                <div class="nav-sub-tier" id="performance-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="javascript:void(0);">Sports Rehab</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Gait Analysis</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Conditioning</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Prevention</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Biomechanics</a></li></ul></div>
-                <div class="nav-sub-tier" id="recovery-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="javascript:void(0);">Manual Therapy</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Soft Tissue</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Dry Needling</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Cryotherapy</a></li></ul></div>
-                <div class="nav-sub-tier" id="clinic-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="javascript:void(0);">Our Story</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Meet the Team</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Facilities</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Philosophy</a></li></ul></div>
-                <div class="nav-sub-tier" id="contact-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="javascript:void(0);">Location</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Direct Booking</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Insurance</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Inquiries</a></li></ul></div>
+    <header class="header" id="header">
+        <div class="nav-content">
+            <a href="#" class="logo">Dr. Masooma's</a>
+            
+            <nav class="nav-links">
+                <li><a href="#performance">Performance</a></li>
+                <li><a href="#recovery">Recovery</a></li>
+                <li><a href="#clinic">The Clinic</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </nav>
+
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <a href="#" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.65rem;">Book Now</a>
+                <button class="menu-toggle" aria-label="Toggle Menu" id="menu-btn">
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
     </header>
-    <section class="hero-section">
-        <div id="liquid-canvas-container"></div>
-        <div class="hero-slides-wrapper">
-            <div class="hero-slide active" id="slide-1">
-                <h1 class="hero-title slide-text">Expert<br>Motion.</h1>
-                <div class="hero-aside slide-aside">
-                    <p class="anim-p">Advanced biomechanics restoring your body to its peak functional state.</p>
-                    <a href="javascript:void(0);" class="btn btn-dark magnetic anim-btn" aria-label="View Treatment">View Treatment <span class="dot"></span></a>
-                </div>
-            </div>
-            <div class="hero-slide" id="slide-2">
-                <h1 class="hero-title slide-text">Precision<br>Recovery.</h1>
-                <div class="hero-aside slide-aside">
-                    <p class="anim-p">Evidence-based protocols designed for elite wellness seekers. Tailored science for your recovery.</p>
-                    <a href="javascript:void(0);" class="btn btn-dark magnetic anim-btn" aria-label="Our Approach">Our Approach <span class="dot"></span></a>
-                </div>
-            </div>
-            <div class="hero-slide" id="slide-3">
-                <h1 class="hero-title slide-text">Elite<br>Wellness.</h1>
-                <div class="hero-aside slide-aside">
-                    <p class="anim-p">Experience the gold standard in human performance and scientific physiotherapy.</p>
-                    <a href="javascript:void(0);" class="btn btn-dark magnetic anim-btn" aria-label="Meet Dr. Masooma">Meet Dr. Masooma <span class="dot"></span></a>
-                </div>
-            </div>
-        </div>
-    </section>
-   
-    <!-- WHO WE HELP (CLINICAL ACCORDION) -->
-    <section class="accordion-section" id="stack-trigger">
-        <div class="accordion-container">
-            <div class="accordion-left">
-                <div class="accordion-header-block">
-                    <span class="sticky-pre foundations-anim">Target Focus</span>
-                    <h2 class="animate-help-title" style="color: var(--premium-plum); font-size: 4rem; letter-spacing: -2px;">Who We Help.</h2>
-                </div>
-                <div class="accordion-list">
-                    <div class="accordion-item active" data-img="acc-img-1">
-                        <div class="acc-head">
-                            <h3 class="acc-title">Athletes</h3>
-                            <span class="acc-icon">+</span>
-                        </div>
-                        <div class="acc-body" style="height: auto; opacity: 1;">
-                            <div class="acc-content-inner">
-                                Return to peak competition levels with data-driven conditioning and elite kinetic analysis. We optimize biomechanics for explosive power and injury resilience.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item" data-img="acc-img-2">
-                        <div class="acc-head">
-                            <h3 class="acc-title">Professionals</h3>
-                            <span class="acc-icon">+</span>
-                        </div>
-                        <div class="acc-body">
-                            <div class="acc-content-inner">
-                                Eliminate chronic neck and back pain through ergonomic recalibration and postural manual resets. Designed for the high-performance executive lifestyle.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item" data-img="acc-img-3">
-                        <div class="acc-head">
-                            <h3 class="acc-title">Rehab Cases</h3>
-                            <span class="acc-icon">+</span>
-                        </div>
-                        <div class="acc-body">
-                            <div class="acc-content-inner">
-                                Accelerated clinical recovery post-operation via targeted tissue modulation and guided loading. We bridge the gap between surgery and full function.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item" data-img="acc-img-4">
-                        <div class="acc-head">
-                            <h3 class="acc-title">Chronic Pain</h3>
-                            <span class="acc-icon">+</span>
-                        </div>
-                        <div class="acc-body">
-                            <div class="acc-content-inner">
-                                Break the pain cycle through advanced neural mapping and sustainable kinetic realignment. We treat the root cause, not just the symptoms.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item" data-img="acc-img-5">
-                        <div class="acc-head">
-                            <h3 class="acc-title">Injuries</h3>
-                            <span class="acc-icon">+</span>
-                        </div>
-                        <div class="acc-body">
-                            <div class="acc-content-inner">
-                                Knee ligament and acute joint tears: Return to running without pain using focused biometric recovery and tissue regeneration protocols.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item" data-img="acc-img-6">
-                        <div class="acc-head">
-                            <h3 class="acc-title">Mobility</h3>
-                            <span class="acc-icon">+</span>
-                        </div>
-                        <div class="acc-body">
-                            <div class="acc-content-inner">
-                                Regain fluid joint movement and independent functional strength for life-long vitality. Agility and freedom of movement at any age.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-right">
-                <div class="acc-img-wrapper">
-                    <img id="acc-img-1" class="acc-img active" src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1200" alt="Athlete">
-                    <img id="acc-img-2" class="acc-img" src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/young-handsome-business-man-with-laptop-office-TMWFIVMbq3BL066L.jpg" alt="Professional">
-                    <img id="acc-img-3" class="acc-img" src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1200" alt="Rehab">
-                    <img id="acc-img-4" class="acc-img" src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200" alt="Pain Relief">
-                    <img id="acc-img-5" class="acc-img" src="https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=1200" alt="Injury">
-                    <img id="acc-img-6" class="acc-img" src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?q=80&w=1200" alt="Mobility">
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- HORIZONTAL GALLERY -->
-    <section class="horizontal-section" id="horizontal-gallery">
-        <div class="horizontal-track">
-            <div class="horizontal-intro">
-                <span class="green-accent gallery-anim">Precision Modalities</span>
-                <h2 class="animate-title">The Clinical<br>Standard.</h2>
+    <nav class="mobile-nav" id="mobile-menu">
+        <a href="#performance">Performance</a>
+        <a href="#recovery">Recovery</a>
+        <a href="#clinic">The Clinic</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-bg">
+                <div class="hero-overlay"></div>
+                <img src="https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=2069&auto=format&fit=crop" alt="Elite Wellness Background">
             </div>
-            <div class="horizontal-card"><img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200&auto=format&fit=crop" alt="Class IV Laser Therapy equipment"><div class="card-content"><h3 class="animate-title-v">Class IV Laser Therapy</h3></div></div>
-            <div class="horizontal-card"><img src="https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=1200&auto=format&fit=crop" alt="Clinical Dry Needling procedure"><div class="card-content"><h3 class="animate-title-v">Clinical Dry Needling</h3></div></div>
-            <div class="horizontal-card"><img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?q=80&w=1200&auto=format&fit=crop" alt="Soft Tissue Integration therapy"><div class="card-content"><h3 class="animate-title-v">Soft Tissue Integration</h3></div></div>
-            <div class="horizontal-card"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1200&auto=format&fit=crop" alt="Neuromuscular Training session"><div class="card-content"><h3 class="animate-title-v">Neuromuscular Training</h3></div></div>
-            <div class="horizontal-card"><img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1200&auto=format&fit=crop" alt="Elite Recovery Systems in use"><div class="card-content"><h3 class="animate-title-v">Elite Recovery Systems</h3></div></div>
-        </div>
-    </section>
-    <!-- IMPACT METRICS -->
-    <section class="metrics-section">
-        <div class="metrics-container">
-            <div class="metric-card">
-                <span class="metric-label animate-hud">Volume</span>
-                <div class="metric-value"><span class="counter" data-target="5000">0</span><span class="metric-suffix">+</span></div>
-                <span class="metric-label animate-hud">Recoveries Completed</span>
-            </div>
-            <div class="metric-card">
-                <span class="metric-label animate-hud">Innovation</span>
-                <div class="metric-value"><span class="counter" data-target="12">0</span><span class="metric-suffix">+</span></div>
-                <span class="metric-label animate-hud">Performance Devices</span>
-            </div>
-            <div class="metric-card">
-                <span class="metric-label animate-hud">Efficacy</span>
-                <div class="metric-value"><span class="counter" data-target="98">0</span><span class="metric-suffix">%</span></div>
-                <span class="metric-label animate-hud">Patient Mobility Success</span>
-            </div>
-        </div>
-    </section>
-   
-    <!-- INNOVATION SECTION (New Insert) -->
-    <div class="premium-about-section" id="physio-section">
-        <div class="about-blob ab-1"></div>
-        <div class="about-blob ab-2"></div>
-       
-        <div class="about-container">
-            <div class="about-content js-about-text">
-                <h2 class="about-title">Leading Physiotherapy <br><span class="highlight-text">Innovation.</span></h2>
-                <div class="about-desc">
-                    <p>
-                        With over fifteen years of experience in human kinetics and sports science, we provide comprehensive physiotherapy consultancy for medical clinics, professional sports teams, and health-tech innovators.
+
+            <div class="hero-content">
+                <div class="hero-text-wrapper">
+                    <h1 class="hero-title">Expert<br>Motion.</h1>
+                </div>
+
+                <div class="hero-desc-wrapper">
+                    <p class="hero-desc">
+                        Advanced biomechanics restoring your body to its peak functional state. Experience the gold standard in human performance.
                     </p>
-                    <br>
-                    <p>
-                        Our team of clinical specialists combines evidence-based practice with advanced biomechanical analysis to deliver recovery solutions that optimize movement and longevity. From injury prevention to elite performance protocols, we partner with you to set the highest standards in modern rehabilitative care.
-                    </p>
+                    <div class="cta-group">
+                        <a href="#" class="btn btn-primary">Our Approach</a>
+                    </div>
                 </div>
             </div>
+        </section>
+    </main>
 
-            <div class="about-carousel-column js-about-img">
-                <div class="coverflow-scope">
-                  <div class="stage">
-                    <div class="actor">
-                        <div class="tilt-frame">
-                            <img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/pexels-yankrukov-5794055-87Xqg4KNqXuStc6G.jpg" alt="Biomechanical Analysis">
-                        </div>
-                    </div>
-                    <div class="actor">
-                        <div class="tilt-frame">
-                            <img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/2149115564-Qmy3o6NxwF6hopgX.jpg" alt="Modern Rehabilitation">
-                        </div>
-                    </div>
-                    <div class="actor">
-                        <div class="tilt-frame">
-                            <img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/83737-32qJ7hupb10nXmF7.jpg" alt="Performance Recovery">
-                        </div>
-                    </div>
-                    <div class="actor">
-                        <div class="tilt-frame">
-                            <img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/2149115584-AaVMKSPVBaHOOIEu.jpg" alt="Sports Therapy">
-                        </div>
-                    </div>
-                    <div class="actor">
-                        <div class="tilt-frame">
-                            <img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/pexels-yankrukov-5794055-1-ZGwEN98wFECZVxvv.jpg" alt="Elite Training">
-                        </div>
-                    </div>
-                    <div class="actor">
-                        <div class="tilt-frame">
-                            <img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/pexels-kampus-6111604-UVfr2Pni6VaGh6to.jpg" alt="Clinical Excellence">
-                        </div>
-                    </div>
-                  </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SCIENCE BEHIND PRACTICE -->
-    <section class="profile-section" id="profile-trigger">
-        <div class="profile-container">
-            <div class="profile-text-side">
-                <span class="sticky-pre profile-anim">The Visionary</span>
-                <h2 class="profile-heading animate-profile-title">The Science behind<br>the Practice.</h2>
-                <p class="profile-bio animate-profile-bio">Dr. Masooma combines clinical rigor with a deep understanding of kinetic potential. Her philosophy treats the body as a high-performance machine requiring expert modulation for sustainable performance.</p>
-                <div class="profile-signature profile-anim">Dr. Masooma, PT</div>
-            </div>
-            <div class="profile-image-wrapper"><img id="profile-img" src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=1974&auto=format&fit=crop" alt="Portrait of Dr. Masooma"></div>
-        </div>
-    </section>
-    <!-- PATIENT JOURNEY (FIXED) -->
-    <section class="journey-section">
-        <div class="journey-header">
-            <span class="sticky-pre animate-journey-h">The Methodology</span>
-            <h2 class="sticky-heading animate-journey-title">The Patient Journey.</h2>
-        </div>
-        <div class="journey-container" id="journey-trigger">
-            <svg class="journey-path-svg" preserveAspectRatio="none">
-                <line x1="50%" y1="0" x2="50%" y2="100%" stroke="rgba(45, 35, 49, 0.1)" stroke-width="2" />
-                <path id="journey-progress-path" d="" stroke="var(--electric-lime)" stroke-width="4" fill="none" stroke-linecap="round" />
-            </svg>
-            <div class="journey-step"><div class="step-content"><span class="step-number">Phase 01</span><h3 class="step-title">Biometric Audit</h3><p class="step-desc">Advanced diagnostic tools mapping structural imbalances and identifying kinetic chains that require immediate modulation.</p></div><div class="step-indicator"><div class="step-dot"></div></div><div style="width: 44%;"></div></div>
-            <div class="journey-step"><div class="step-content"><span class="step-number">Phase 02</span><h3 class="step-title">Neural Modulation</h3><p class="step-desc">Targeted manual resets aimed at inflammation reduction and restoring neural signal clarity for optimal motor control.</p></div><div class="step-indicator"><div class="step-dot"></div></div><div style="width: 44%;"></div></div>
-            <div class="journey-step"><div class="step-content"><span class="step-number">Phase 03</span><h3 class="step-title">Kinetic Training</h3><p class="step-desc">Corrective loading protocols and foundational movement patterns designed to build structural joint stability and resilience.</p></div><div class="step-indicator"><div class="step-dot"></div></div><div style="width: 44%;"></div></div>
-            <div class="journey-step"><div class="step-content"><span class="step-number">Phase 04</span><h3 class="step-title">Optimization</h3><p class="step-desc">Sustainable human performance transition—integrating refined mechanics into your daily lifestyle or elite athletic discipline.</p></div><div class="step-indicator"><div class="step-dot"></div></div><div style="width: 44%;"></div></div>
-        </div>
-    </section>
-    <!-- KINETIC METHODOLOGY (STRETCHED/FIXED) -->
-    <section class="sticky-scroll-container">
-        <div class="sticky-left">
-            <span class="sticky-pre foundations-anim">Core Foundations</span>
-            <h2 class="sticky-heading animate-foundations-title">The Kinetic<br>Methodology.</h2>
-        </div>
-        <div class="scrolling-right" id="sticky-scroll-track">
-            <div class="scroll-item" id="found-1"><div class="scroll-image-wrap"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/83737-32qJ7hupb10nXmF7.jpg" alt="Technical Diagnostics setup"></div><div class="scroll-caption"><span>01. Technical Diagnostics</span></div></div>
-            <div class="scroll-item" id="found-2"><div class="scroll-image-wrap"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/2149115584-AaVMKSPVBaHOOIEu.jpg" alt="Dynamic Biomechanics analysis"></div><div class="scroll-caption"><span>02. Dynamic Biomechanics</span></div></div>
-            <div class="scroll-item" id="found-3"><div class="scroll-image-wrap"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/pexels-yankrukov-5794055-1-ZGwEN98wFECZVxvv.jpg" alt="Neural Pathway Mapping"></div><div class="scroll-caption"><span>03. Neural Pathway Mapping</span></div></div>
-            <div class="scroll-item" id="found-4"><div class="scroll-image-wrap"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/pexels-kampus-6111604-UVfr2Pni6VaGh6to.jpg" alt="Structural Integrity assessment"></div><div class="scroll-caption"><span>04. Structural Integrity</span></div></div>
-            <div class="scroll-item" id="found-5"><div class="scroll-image-wrap"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/acupuncture-6324472_1280-sjidkaRJ8V7ZdF4j.jpg" alt="Systemic Alignment therapy"></div><div class="scroll-caption"><span>05. Systemic Alignment</span></div></div>
-            <div class="scroll-item" id="found-6"><div class="scroll-image-wrap"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/massage-3710210_1280-GBbClorOfhcP7EwL.jpg" alt="Manual Restoration"></div><div class="scroll-caption"><span>06. Manual Restoration</span></div></div>
-        </div>
-    </section>
-    <!-- OUR EXPERTISE (FIXED POSITIONING) -->
-    <section class="portfolio-section">
-        <div class="portfolio-container-inner">
-            <div class="portfolio-header">
-                <span class="sticky-pre animate-portfolio-h">Our Expertise</span>
-                <h2 class="sticky-heading animate-portfolio-title">Clinical Specializations.</h2>
-            </div>
-            <div class="project-grid">
-                <a href="javascript:void(0);" class="project-card"><div class="image-wrapper"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/2149173483-ln0lJqOARcVZ8u1k.jpg" alt="Elite Recovery program"></div><span class="tags spec-tags">Performance</span><h2 class="project-title spec-title">Elite Recovery</h2></a>
-                <a href="javascript:void(0);" class="project-card"><div class="image-wrapper"><img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?q=80&w=1974&auto=format&fit=crop" alt="Deep Integration therapy"></div><span class="tags spec-tags">Manual</span><h2 class="project-title spec-title">Deep Integration</h2></a>
-                <a href="javascript:void(0);" class="project-card"><div class="image-wrapper"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/2150321571-xdvEyZbIz3shlBZy.jpg" alt="Motor Training session"></div><span class="tags spec-tags">Neural</span><h2 class="project-title spec-title">Motor Training</h2></a>
-                <a href="javascript:void(0);" class="project-card"><div class="image-wrapper"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop" alt="Structural Alignment procedure"></div><span class="tags spec-tags">Foundation</span><h2 class="project-title spec-title">Structural Alignment</h2></a>
-            </div>
-        </div>
-    </section>
-    <!-- TEETH REVEAL (FIXED) -->
-    <section class="reveal-section" id="teeth-trigger">
-        <img class="reveal-clinic-img" src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2070&auto=format&fit=crop" alt="Clinic Interior">
-        <div class="tooth tooth-top" id="tooth-t"></div>
-        <div class="reveal-text-fixed">
-            <h2 id="teeth-text">Dr. Masooma's</h2>
-        </div>
-        <div class="tooth tooth-bottom" id="tooth-b"></div>
-    </section>
-    <!-- TESTIMONIALS -->
-    <section class="testimonial-section">
-        <div class="testimonial-bg" id="parallax-bg"></div>
-        <div class="testimonial-content">
-            <h2 class="testimonial-quote" id="testimonial-text">"The methodology applied here transcends traditional therapy. It is the convergence of data and kinetic artistry."</h2>
-            <span class="testimonial-author" id="testimonial-author">Elite Performance Institute</span>
-        </div>
-    </section>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FontLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/TextGeometry.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/split-type"></script>
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
     <script>
-        // --- GLOBAL VARIABLES ---
-        let heroVideoElement = null; 
-        let startHeroSequence = null; 
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            const spans = menuBtn.querySelectorAll('span');
+            spans[0].style.transform = mobileMenu.classList.contains('active') ? 'rotate(45deg) translate(5px, 5px)' : 'none';
+            spans[1].style.transform = mobileMenu.classList.contains('active') ? 'rotate(-45deg) translate(5px, -5px)' : 'none';
+        });
 
-        // --- PRELOADER LOGIC ---
-        const initPreloader = () => {
-            const container = document.getElementById('preloader-canvas');
-            if(!container) return;
+        // Close menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+            });
+        });
 
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color('#1A2F25');
-            scene.fog = new THREE.Fog('#1A2F25', 15, 50);
+        // Entrance Animations
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1.2 }});
 
-            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-            camera.position.set(0, 0, 22);
+            tl.from(".header", { y: -100, opacity: 0 })
+              .from(".hero-title", { y: 100, opacity: 0, stagger: 0.2 }, "-=0.8")
+              .from(".hero-desc", { y: 30, opacity: 0 }, "-=1")
+              .from(".cta-group", { scale: 0.9, opacity: 0 }, "-=1");
+        });
 
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            renderer.localClippingEnabled = true;
-            container.appendChild(renderer.domElement);
-
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
-            scene.add(ambientLight);
-
-            const dirLight = new THREE.DirectionalLight(0xffffff, 0.3);
-            dirLight.position.set(10, 15, 10);
-            dirLight.castShadow = true;
-            dirLight.shadow.mapSize.width = 1024; 
-            dirLight.shadow.mapSize.height = 1024;
-            scene.add(dirLight);
-
-            const greenLight = new THREE.PointLight(0x98D8A1, 2.5, 30); 
-            greenLight.position.set(0, -5, 5);
-            scene.add(greenLight);
-
-            const cursor = { x: 0, y: 0 };
-            const textGroup = new THREE.Group();
-            scene.add(textGroup);
-
-            const onMove = (event) => {
-                cursor.x = (event.clientX / window.innerWidth) - 0.5;
-                cursor.y = (event.clientY / window.innerHeight) - 0.5;
-            };
-            window.addEventListener('mousemove', onMove);
-
-            let preloaderFrameId;
-            const clock = new THREE.Clock();
-
-            function animatePreloader() {
-                preloaderFrameId = requestAnimationFrame(animatePreloader);
-                const time = clock.getElapsedTime();
-
-                // Parallax
-                const targetRotX = -0.05 + (cursor.y * 0.1); 
-                const targetRotY = cursor.x * 0.15;
-                textGroup.rotation.x += (targetRotX - textGroup.rotation.x) * 0.05;
-                textGroup.rotation.y += (targetRotY - textGroup.rotation.y) * 0.05;
-                textGroup.position.y = Math.sin(time * 0.8) * 0.1;
-
-                renderer.render(scene, camera);
+        // Scroll Effect for Header
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.style.width = '100%';
+                header.style.top = '0';
+                header.style.borderRadius = '0';
+            } else {
+                header.style.width = '90%';
+                header.style.top = '1rem';
+                header.style.borderRadius = '100px';
             }
-            animatePreloader();
-
-            // Font Loading & Animation Sequence
-            const loader = new THREE.FontLoader();
-            loader.load('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/fonts/helvetiker_regular.typeface.json', function (font) {
-                const loaderText = document.getElementById('loader-text');
-                if(loaderText) loaderText.style.opacity = 0;
-
-                const textString = "Dr. Masooma's\nAdvanced Physiorehab";
-                const geometry = new THREE.TextGeometry(textString, {
-                    font: font, size: 1.8, height: 0.3, curveSegments: 12,
-                    bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.02, bevelOffset: 0, bevelSegments: 5
-                });
-                geometry.center();
-
-                const revealPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), -20); 
-                const material = new THREE.MeshStandardMaterial({
-                    color: 0x98D8A1, roughness: 1.0, metalness: 0.0,
-                    clippingPlanes: [ revealPlane ], clipShadows: true
-                });
-
-                const textMesh = new THREE.Mesh(geometry, material);
-                textMesh.castShadow = true; textMesh.receiveShadow = true;
-                textGroup.add(textMesh);
-
-                const tl = gsap.timeline({
-                    onComplete: () => {
-                        // 1. Trigger the Main Site Sequence FIRST (Video + Text)
-                        if (typeof startHeroSequence === 'function') {
-                            startHeroSequence();
-                        }
-                        
-                        // 2. Then Fade Out Overlay
-                        gsap.to("#preloader-overlay", { 
-                            opacity: 0, 
-                            duration: 0.8, 
-                            delay: 0.2, // Tiny buffer to let video frame render
-                            onComplete: () => {
-                                document.getElementById("preloader-overlay").style.display = "none";
-                                cancelAnimationFrame(preloaderFrameId);
-                                renderer.dispose();
-                                window.removeEventListener('mousemove', onMove);
-                            }
-                        });
-                    }
-                });
-
-                tl.from(camera.position, { z: 18, duration: 5, ease: "power2.out" })
-                  .to(revealPlane, { constant: 20, duration: 4, ease: "power1.inOut" }, "-=5")
-                  .to("#subtitle-container", { opacity: 1, duration: 2 }, "-=2")
-                  .to(".progress-line", { width: "80px", duration: 1.5, ease: "expo.out" }, "-=1.5");
-            });
-
-            window.addEventListener('resize', () => {
-                if(document.getElementById("preloader-overlay").style.display === "none") return;
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        };
-
-        let bgMaterial;
-
-        const initHeroWebGL = () => {
-            const container = document.getElementById('liquid-canvas-container');
-            if(!container) return;
-            const scene = new THREE.Scene();
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            container.appendChild(renderer.domElement);
-            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-           
-            const video = document.createElement('video');
-            video.src = 'https://assets.zyrosite.com/dWxL2je49ks9BZq5/6786688_assistance_body_1280x720-EZSxCiSbSX85pgJt.mp4';
-            
-            // --- VIDEO CONFIGURATION ---
-            // Simple setup: no DOM appending, just memory reference
-            video.crossOrigin = "anonymous"; 
-            video.loop = true; 
-            video.muted = true; 
-            video.playsInline = true;
-            video.autoplay = false; // Important: Wait for trigger
-            
-            heroVideoElement = video; // Store global ref
-
-            video.addEventListener('error', () => console.error('Video load failed'));
-            
-            const videoTexture = new THREE.VideoTexture(video); 
-            videoTexture.minFilter = THREE.LinearFilter;
-            
-            const loader = new THREE.TextureLoader(); loader.setCrossOrigin('anonymous');
-            const textures = [videoTexture, loader.load('https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop'), loader.load('https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=2069&auto=format&fit=crop')];
-            textures.forEach(t => t.minFilter = THREE.LinearFilter);
-            bgMaterial = new THREE.ShaderMaterial({
-                uniforms: { uTexCurrent: { value: textures[0] }, uTexNext: { value: textures[1] }, uMix: { value: 0.0 }, uZoom: { value: 1.0 }, uPan: { value: new THREE.Vector2(0, 0) } },
-                vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }`,
-                fragmentShader: `uniform sampler2D uTexCurrent; uniform sampler2D uTexNext; uniform float uMix; uniform float uZoom; uniform vec2 uPan; varying vec2 vUv; void main() { vec2 uv = (vUv - 0.5) * uZoom + 0.5 + uPan; gl_FragColor = mix(texture2D(uTexCurrent, uv), texture2D(uTexNext, uv), uMix); }`
-            });
-            scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), bgMaterial));
-            window.addEventListener('resize', () => renderer.setSize(window.innerWidth, window.innerHeight));
-            const animate = () => {
-                const t = performance.now() * 0.001;
-                bgMaterial.uniforms.uZoom.value = 1.0 - (0.05 * Math.sin(t * 0.1));
-                bgMaterial.uniforms.uPan.value.set(0.01 * Math.cos(t * 0.15), 0.01 * Math.sin(t * 0.15));
-                renderer.render(scene, camera); requestAnimationFrame(animate);
-            };
-            animate(); return textures;
-        };
-        window.addEventListener("load", () => {
-            gsap.registerPlugin(ScrollTrigger);
-            
-            // 1. Initialize Hero WebGL (Video is created but paused)
-            const textures = initHeroWebGL();
-            
-            const lenis = new Lenis({ duration: 1.2, smooth: true });
-            ScrollTrigger.scrollerProxy(document.body, { scrollTop(value) { return arguments.length ? lenis.scrollTo(value) : lenis.scroll; } });
-            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); } requestAnimationFrame(raf);
-            window.addEventListener('resize', () => ScrollTrigger.refresh());
-            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            
-            // --- NAVIGATION ---
-            const header = document.getElementById('main-header');
-            const triggers = document.querySelectorAll('.menu-trigger');
-            const burger = document.querySelector('.burger');
-            let activeMenu = null;
-            triggers.forEach(trig => {
-                trig.addEventListener('mouseenter', () => {
-                    const targetId = trig.getAttribute('data-target');
-                    const target = document.getElementById(targetId);
-                    if (!target || activeMenu === target) return;
-                    gsap.to(header, { height: 140, borderRadius: 40, duration: 0.5, ease: "power4.out" });
-                    if (activeMenu) {
-                        gsap.set(activeMenu, { autoAlpha: 0, y: -10, display: 'none' });
-                        activeMenu.classList.remove('active');
-                    }
-                    target.style.display = 'flex';
-                    target.classList.add('active');
-                    gsap.fromTo(target, { autoAlpha: 0, y: 15 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power2.out" });
-                    gsap.fromTo(target.querySelectorAll('.sub-menu-item'), { opacity: 0, y: 10 }, { opacity: 1, y: 0, stagger: 0.03, delay: 0.1 });
-                    activeMenu = target;
-                });
-            });
-            header.addEventListener('mouseleave', () => {
-                gsap.to(header, { height: 70, borderRadius: 50, duration: 0.5 });
-                if(activeMenu) {
-                    gsap.to(activeMenu, { autoAlpha: 0, duration: 0.2, onComplete: () => {
-                        activeMenu.style.display = 'none';
-                        activeMenu.classList.remove('active');
-                        activeMenu = null;
-                    }});
-                }
-            });
-            burger.addEventListener('click', () => {
-                const navLinks = document.querySelector('.nav-links');
-                navLinks.classList.toggle('active');
-            });
-            
-            // --- HERO ANIMATION CONTROL ---
-            let currentIdx = 0;
-            const slideEls = [document.getElementById('slide-1'), document.getElementById('slide-2'), document.getElementById('slide-3')];
-            
-            // Initialize: Hide everything initially so it doesn't flash behind preloader
-            slideEls.forEach(el => gsap.set(el, { autoAlpha: 0 }));
-            
-            const animateHeroText = (idx) => {
-                if (reducedMotion) return;
-                const s = slideEls[idx];
-                
-                // Make current slide visible
-                gsap.set(s, { autoAlpha: 1 });
-                
-                const charSplit = new SplitType(s.querySelector('.slide-text'), { types: 'chars' });
-                const aside = s.querySelector('.hero-aside p');
-                const btn = s.querySelector('.anim-btn');
-                const tl = gsap.timeline();
-                
-                // Animation from hidden state
-                tl.from(charSplit.chars, { opacity: 0, y: 50, filter: "blur(15px)", stagger: 0.03, duration: 1.2, ease: "power4.out" })
-                  .fromTo(aside, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, filter: "blur(0px)" }, "-=0.8")
-                  .from(btn, { opacity: 0, scale: 0.9, duration: 1 }, "-=0.6");
-            };
-
-            // Define sequence triggered by preloader
-            startHeroSequence = () => {
-                // 1. Start Video Immediately
-                if(heroVideoElement) {
-                    heroVideoElement.play().catch(e => console.log("Video autoplay blocked:", e));
-                }
-                
-                // 2. Delay Start of First Slide & Loop by 1.5 seconds
-                setTimeout(() => {
-                    // Start First Slide Animation
-                    animateHeroText(0);
-
-                    // Start Slideshow Loop
-                    setInterval(() => {
-                        const prev = currentIdx; currentIdx = (currentIdx + 1) % 3;
-                        if(bgMaterial) {
-                            bgMaterial.uniforms.uTexCurrent.value = textures[prev];
-                            bgMaterial.uniforms.uTexNext.value = textures[currentIdx];
-                            gsap.fromTo(bgMaterial.uniforms.uMix, { value: 0 }, { value: 1, duration: 1.5, ease: "power2.inOut" });
-                        }
-                        gsap.to(slideEls[prev], { autoAlpha: 0, duration: 0.5 });
-                        // Next slide fades in handled by animateHeroText logic
-                        animateHeroText(currentIdx);
-                    }, 6000);
-                }, 1500);
-            };
-            
-            // 2. Start Preloader (This will trigger startHeroSequence when done)
-            initPreloader();
-           
-            // --- ACCORDION (WHO WE HELP) LOGIC ---
-            const accordions = document.querySelectorAll('.accordion-item');
-            const accImages = document.querySelectorAll('.acc-img');
-           
-            accordions.forEach(acc => {
-                acc.addEventListener('click', () => {
-                    const isActive = acc.classList.contains('active');
-                   
-                    // Reset all
-                    accordions.forEach(item => {
-                        item.classList.remove('active');
-                        gsap.to(item.querySelector('.acc-body'), { height: 0, opacity: 0, duration: 0.3 });
-                    });
-                    accImages.forEach(img => img.classList.remove('active'));
-
-                    if (!isActive) {
-                        acc.classList.add('active');
-                        gsap.to(acc.querySelector('.acc-body'), { height: 'auto', opacity: 1, duration: 0.3 });
-                        const imgId = acc.getAttribute('data-img');
-                        document.getElementById(imgId).classList.add('active');
-                    }
-                });
-            });
-
-            // --- HORIZONTAL GALLERY ---
-            const track = document.querySelector('.horizontal-track');
-            const hCards = gsap.utils.toArray('.horizontal-card');
-            const horizontalTl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: ".horizontal-section",
-                    start: "top top",
-                    end: () => `+=${track.scrollWidth - window.innerWidth}`,
-                    scrub: 1,
-                    pin: true,
-                    anticipatePin: 1
-                }
-            });
-            horizontalTl.to(track, { x: () => -(track.scrollWidth - window.innerWidth), ease: "none" });
-            hCards.forEach((card) => {
-                const img = card.querySelector('img');
-                gsap.to(card, { opacity: 1, scale: 1, filter: "blur(0px)", scrollTrigger: { trigger: card, containerAnimation: horizontalTl, start: "left right-=200", toggleActions: "play none none reverse" }});
-                gsap.fromTo(img, { x: "-10%" }, { x: "10%", ease: "none", scrollTrigger: { trigger: card, containerAnimation: horizontalTl, start: "left right", end: "right left", scrub: true }});
-                card.addEventListener('mouseenter', () => gsap.to(img, { scale: 1.1, filter: "brightness(1.1)", duration: 0.8 }));
-                card.addEventListener('mouseleave', () => gsap.to(img, { scale: 1, filter: "brightness(0.85)", duration: 0.8 }));
-            });
-            // --- METRICS ---
-            gsap.to(".metric-card", { opacity: 1, y: 0, stagger: 0.2, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: ".metrics-section", start: "top 80%" }});
-            document.querySelectorAll('.counter').forEach(c => {
-                gsap.to(c, { innerText: parseInt(c.getAttribute('data-target')), duration: 3, snap: { innerText: 1 }, scrollTrigger: { trigger: c, start: "top 90%" }});
-            });
-
-            // --- INNOVATION SECTION LOGIC ---
-            // 1. SCROLL REVEAL
-            const scrollObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('about-visible');
-                        scrollObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.2 });
-            const textContent = document.querySelector('.js-about-text');
-            if (textContent) scrollObserver.observe(textContent);
-
-            // 2. 3D CAROUSEL LOGIC
-            const initInnovationCarousel = () => {
-                const scope = document.querySelector('.coverflow-scope');
-                if(!scope) return;
-
-                const actors = Array.from(scope.querySelectorAll('.actor'));
-                const total = actors.length;
-                let currentIndex = 0;
-                let lastScrollTime = 0;
-                const scrollCooldown = 100; 
-                let touchStartX = 0;
-                let touchEndX = 0;
-
-                const distX = 180;  
-                const distZ = -200; 
-                const rotY  = 60;   
-                const speed = 4000; 
-
-                function update() {
-                    actors.forEach((actor, i) => {
-                    let offset = (i - currentIndex) % total;
-                    if (offset < -total / 2) offset += total;
-                    if (offset > total / 2) offset -= total;
-                   
-                    let zIndex = 100 - Math.abs(offset);
-                    const tiltFrame = actor.querySelector('.tilt-frame');
-                   
-                    if (offset === 0) {
-                        actor.style.transform = `translateX(0) translateZ(0) rotateY(0deg)`;
-                        actor.classList.remove('side-card');
-                        actor.style.pointerEvents = 'auto';
-                    } else {
-                        actor.classList.add('side-card');
-                        const x = offset * distX;
-                        const z = distZ; 
-                        const r = offset < 0 ? rotY : -rotY;
-                        actor.style.transform = `translateX(${x}px) translateZ(${z}px) rotateY(${r}deg)`;
-                        actor.style.pointerEvents = 'none'; 
-                        if(tiltFrame) tiltFrame.style.transform = 'none';
-                    }
-
-                    actor.style.zIndex = zIndex;
-                    actor.style.opacity = Math.abs(offset) > 2 ? 0 : 1;
-                    });
-                }
-
-                function next() { currentIndex = (currentIndex + 1) % total; update(); }
-                function prev() { currentIndex = (currentIndex - 1 + total) % total; update(); }
-
-                let autoPlay = setInterval(next, speed);
-
-                scope.addEventListener('mouseenter', () => clearInterval(autoPlay));
-                scope.addEventListener('mouseleave', () => autoPlay = setInterval(next, speed));
-
-                scope.addEventListener('wheel', (e) => {
-                    // Prevent interfering with main page scroll unless focused/hovered strongly, 
-                    // or just use high threshold
-                    if (Math.abs(e.deltaY) < 10) return;
-                    // Note: Preventing default on wheel inside a scrollable page can be tricky.
-                    // We will allow page scroll if not handled, but for this component, let's keep it simple.
-                    // e.preventDefault(); 
-                   
-                    const now = Date.now();
-                    if (now - lastScrollTime < scrollCooldown) return;
-                    lastScrollTime = now;
-                    clearInterval(autoPlay);
-
-                    if (e.deltaY > 0) next(); else prev();
-
-                    setTimeout(() => {
-                        if (Date.now() - lastScrollTime >= scrollCooldown) {
-                             autoPlay = setInterval(next, speed);
-                        }
-                    }, scrollCooldown + 50); 
-                }, { passive: true }); // Changed to passive: true to allow page scrolling
-
-                scope.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
-                scope.addEventListener('touchend', e => {
-                    touchEndX = e.changedTouches[0].screenX;
-                    if (touchEndX < touchStartX - 50) { next(); clearInterval(autoPlay); autoPlay = setInterval(next, speed); }
-                    if (touchEndX > touchStartX + 50) { prev(); clearInterval(autoPlay); autoPlay = setInterval(next, speed); }
-                }, {passive: true});
-               
-                actors.forEach((actor, index) => {
-                    actor.addEventListener('click', () => {
-                    if(currentIndex !== index) { currentIndex = index; update(); }
-                    });
-                });
-
-                update();
-            };
-            initInnovationCarousel();
-
-            // --- PROFILE & JOURNEY RE-SYNC ---
-            gsap.from(".animate-profile-title", { opacity: 0, y: 30, duration: 1, scrollTrigger: { trigger: "#profile-trigger", start: "top 70%" }});
-           
-            const jPath = document.getElementById('journey-progress-path');
-            const jContainer = document.getElementById('journey-trigger');
-            const updatePath = () => {
-                if(!jPath || !jContainer) return;
-                jPath.setAttribute('d', `M 2 0 L 2 ${jContainer.scrollHeight}`);
-                const jPathLen = jPath.getTotalLength();
-                gsap.set(jPath, { strokeDasharray: jPathLen, strokeDashoffset: jPathLen });
-                gsap.to(jPath, { strokeDashoffset: 0, scrollTrigger: { trigger: "#journey-trigger", start: "top center", end: "bottom center", scrub: 1 }});
-            };
-            updatePath();
-            window.addEventListener('resize', updatePath);
-            document.querySelectorAll('.journey-step').forEach((step) => {
-                gsap.to(step.querySelector('.step-content'), { opacity: 1, y: 0, duration: 1.2, ease: "power4.out", scrollTrigger: { trigger: step, start: "top 75%" }});
-                gsap.to(step.querySelector('.step-dot'), { opacity: 1, scale: 1, duration: 0.4, scrollTrigger: { trigger: step, start: "top 75%" }});
-            });
-            // --- STICKY METHODOLOGY ---
-            const scrollItems = document.querySelectorAll('.scroll-item');
-            scrollItems.forEach((item) => {
-                const s = new SplitType(item.querySelector('.scroll-caption'), { types: 'chars' });
-                gsap.set(s.chars, { opacity: 0.2 });
-                ScrollTrigger.create({
-                    trigger: item, start: "top center", end: "bottom center",
-                    onToggle: self => {
-                        item.classList.toggle('is-active', self.isActive);
-                        gsap.to(s.chars, { opacity: self.isActive ? 1 : 0.2, color: self.isActive ? "#a3ff47" : "#fff", duration: 0.5 });
-                    }
-                });
-            });
-            ScrollTrigger.create({ trigger: ".sticky-scroll-container", start: "top top", end: "bottom bottom", pin: ".sticky-left", pinSpacing: true, invalidateOnRefresh: true });
-            // --- PORTFOLIO & REVEAL ---
-            document.querySelectorAll('.project-card').forEach(card => {
-                gsap.to(card, { opacity: 1, y: 0, duration: 1.2, scrollTrigger: { trigger: card, start: "top 85%" }});
-            });
-            const revealTl = gsap.timeline({ scrollTrigger: { trigger: "#teeth-trigger", start: "top top", end: "+=150%", pin: true, scrub: 1 }});
-            revealTl.to("#tooth-t", { yPercent: -101, ease: "none" }, 0) // Overlapping slightly for no gap
-                    .to("#tooth-b", { yPercent: 101, ease: "none" }, 0)
-                    .from(".reveal-clinic-img", { scale: 1.2, filter: "blur(10px)", duration: 1 }, 0);
-            // --- TESTIMONIALS ---
-            const tTitle = new SplitType('#testimonial-text', { types: 'words' });
-            gsap.to(tTitle.words, { opacity: 1, filter: "blur(0px)", scale: 1, stagger: 0.06, duration: 2, scrollTrigger: { trigger: ".testimonial-section", start: "top 40%" }});
-            gsap.to("#testimonial-author", { opacity: 1, y: 0, duration: 1.2, delay: 1, scrollTrigger: { trigger: ".testimonial-section", start: "top 40%" }});
-            gsap.to("#parallax-bg", { y: "15%", scrollTrigger: { trigger: ".testimonial-section", start: "top bottom", end: "bottom top", scrub: true }});
-            // --- MAGNETIC ---
-            document.querySelectorAll('.magnetic').forEach(btn => {
-                const moveHandler = (e) => {
-                    const r = btn.getBoundingClientRect();
-                    const clientX = e.clientX || e.touches[0].clientX;
-                    const clientY = e.clientY || e.touches[0].clientY;
-                    gsap.to(btn, { x: (clientX - r.left - r.width/2) * 0.4, y: (clientY - r.top - r.height/2) * 0.4, duration: 0.3 });
-                };
-                btn.addEventListener('mousemove', moveHandler);
-                btn.addEventListener('touchmove', moveHandler);
-                btn.addEventListener('mouseleave', () => gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1,0.3)" }));
-                btn.addEventListener('touchend', () => gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1,0.3)" }));
-            });
-            ScrollTrigger.refresh();
         });
     </script>
 </body>
