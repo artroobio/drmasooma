@@ -10,14 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 1. VARIABLES & RESET (MOBILE DEFAULT) --- */
+        /* --- 1. GLOBAL VARIABLES & RESET --- */
         :root {
             --primary-green: #589a31;
             --vitality-gradient: linear-gradient(135deg, #a3ff47 0%, #589a31 50%, #2C5E1A 100%);
             --off-white: #F4F7F2;
             --glass-border: rgba(88, 154, 49, 0.25);
             --premium-plum: #2D2331;
-            --nav-bg: rgba(255, 255, 255, 0.9);
+            --nav-bg: rgba(255, 255, 255, 0.95);
             --nav-blur: 30px;
         }
 
@@ -31,53 +31,79 @@
             width: 100%;
         }
 
-        /* --- 2. BACKGROUND MEDIA LAYERS (HTML5 Replacement for WebGL) --- */
+        /* --- 2. BACKGROUND MEDIA --- */
         .hero-bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            height: 100dvh;
-            z-index: -1;
-            overflow: hidden;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
+            z-index: -1; overflow: hidden;
         }
-
         .bg-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0; /* Hidden by default */
-            z-index: 1;
-            will-change: transform, opacity;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0; z-index: 1; will-change: transform, opacity;
         }
-
-        .bg-layer.active {
-            z-index: 2; /* Bring active to front */
-        }
-
-        /* Dark Overlay */
+        .bg-layer.active { z-index: 2; }
         .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(180deg, rgba(45,35,49,0.4) 0%, transparent 50%, rgba(45,35,49,0.3) 100%);
-            z-index: 2;
-            pointer-events: none;
+            z-index: 2; pointer-events: none;
         }
 
-        /* --- 3. NAVIGATION (MOBILE FIRST) --- */
+        /* --- 3. INDEPENDENT UI ELEMENTS --- */
+
+        /* 3A. Floating Burger Button (Extracted for Clickability) */
+        .floating-burger {
+            position: fixed;
+            top: 25px; 
+            right: 25px;
+            z-index: 2000; /* Highest Priority */
+            font-size: 1.5rem;
+            color: var(--premium-plum);
+            cursor: pointer;
+            width: 40px; height: 40px;
+            display: flex; justify-content: center; align-items: center;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .floating-burger:hover { transform: scale(1.1); }
+
+        /* 3B. Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #fff;
+            z-index: 1500; /* Above Header (1000), Below Burger (2000) */
+            padding: 90px 30px 40px;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .mobile-menu-overlay.active { transform: translateX(0); }
+
+        /* Mobile Menu Items */
+        .mobile-group { border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
+        .mobile-link-head {
+            font-size: 1.1rem; font-weight: 700; text-transform: uppercase; color: var(--premium-plum);
+            display: flex; justify-content: space-between; align-items: center; padding: 15px 0; cursor: pointer;
+        }
+        .mobile-arrow { font-size: 0.8rem; transition: transform 0.3s; }
+        .mobile-group.open .mobile-arrow { transform: rotate(180deg); }
+        .mobile-sub-list { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; padding-left: 10px; }
+        .mobile-group.open .mobile-sub-list { max-height: 400px; }
+        .mobile-sub-item { display: block; text-decoration: none; color: #666; font-size: 0.9rem; padding: 8px 0; font-weight: 500; }
+        .mobile-cta-btn {
+            margin-top: 30px; text-align: center; display: inline-block; width: 100%; padding: 15px; 
+            background: var(--vitality-gradient); color: #fff; border-radius: 50px; text-decoration: none; font-weight: 800; text-transform: uppercase;
+        }
+
+
+        /* --- 4. MAIN HEADER (Desktop & Logo) --- */
         header.site-nav {
             position: fixed;
-            top: 10px;
-            left: 10px;
-            width: calc(100% - 20px);
-            height: 60px;
+            top: 10px; left: 10px;
+            width: calc(100% - 20px); /* Mobile Width */
+            height: 60px; /* Mobile Height */
             z-index: 1000;
             background: var(--nav-bg);
             backdrop-filter: blur(var(--nav-blur));
@@ -85,282 +111,118 @@
             border-radius: 30px;
             border: 1px solid var(--glass-border);
             box-shadow: 0 10px 40px rgba(45, 35, 49, 0.1);
-            transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.6s ease;
-            overflow: hidden;
+            transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.5s ease;
+            overflow: hidden; /* Needed for dynamic island shape */
         }
 
         .nav-container {
-            width: 100%;
-            height: 100%;
-            padding: 0 20px;
-        }
-
-        .nav-main-tier {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-            width: 100%;
+            width: 100%; height: 60px; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
         }
 
         .logo {
-            font-size: 1rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            background: var(--vitality-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+            background: var(--vitality-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .burger {
-            display: block; /* Visible on mobile */
-            cursor: pointer;
-            font-size: 1.4rem;
-            color: var(--premium-plum);
-            padding: 5px;
-        }
+        /* Desktop Elements - Initially Hidden */
+        .desktop-menu-links { display: none; }
+        .btn-desktop-cta { display: none; }
+        .desktop-sub-menu-wrapper { display: none; }
 
-        /* Links hidden on mobile, shown via JS toggling class */
-        .nav-links {
-            display: none; 
-            flex-direction: column;
-            gap: 15px;
-            position: absolute;
-            top: 60px;
-            left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            padding: 20px;
-            border-top: 1px solid var(--glass-border);
-        }
-        
-        .nav-links.mobile-active {
-            display: flex;
-        }
 
-        .nav-links a.nav-item {
-            text-decoration: none;
-            color: var(--premium-plum);
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            display: block;
-            padding: 10px 0;
-        }
-
-        /* Sub-menu hidden on mobile to keep layout clean */
-        .nav-sub-tier-wrapper { display: none; }
-        
-        /* Book Now button hidden on very small screens in nav header to save space */
-        .nav-cta-desktop { display: none; }
-
-        /* --- 4. HERO SECTION CONTENT (MOBILE FIRST) --- */
-        .hero-section {
-            position: relative;
-            height: 100vh;
-            height: 100dvh;
-            width: 100%;
-            z-index: 10;
-        }
-
+        /* --- 5. HERO CONTENT --- */
+        .hero-section { position: relative; height: 100vh; height: 100dvh; width: 100%; z-index: 10; }
         .hero-slides-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            padding: 0 20px;
-            display: flex;
-            /* Mobile: Stack items bottom */
-            align-items: flex-end; 
-            padding-bottom: 80px; 
+            position: relative; width: 100%; height: 100%; padding: 0 20px;
+            display: flex; align-items: flex-end; padding-bottom: 80px;
         }
-
         .hero-slide {
-            position: absolute;
-            bottom: 80px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column; /* Mobile: Stack vertical */
-            justify-content: flex-end;
-            align-items: flex-start;
-            gap: 20px;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
+            position: absolute; bottom: 80px; left: 20px; right: 20px;
+            display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
+            gap: 20px; opacity: 0; visibility: hidden; pointer-events: none;
         }
-
-        .hero-slide.active {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: all;
-        }
-
+        .hero-slide.active { opacity: 1; visibility: visible; pointer-events: all; }
         .hero-title {
-            font-size: clamp(3rem, 12vw, 4.5rem); /* Responsive text sizing */
-            font-weight: 400;
-            line-height: 0.95;
-            letter-spacing: -0.04em;
-            color: #fff;
-            text-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            word-break: break-word;
-            width: 100%;
+            font-size: clamp(3rem, 12vw, 4.5rem); font-weight: 400; line-height: 0.95;
+            letter-spacing: -0.04em; color: #fff; text-shadow: 0 10px 40px rgba(0,0,0,0.4); width: 100%;
         }
-
-        .hero-aside {
-            width: 100%;
-            text-align: left;
-        }
-
-        .hero-aside p {
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 25px;
-            font-weight: 300;
-            color: #e0e0e0;
-            max-width: 90%;
-            opacity: 0; /* JS handles fade in */
-        }
-
-        /* Buttons */
+        .hero-aside p { font-size: 1rem; line-height: 1.5; margin-bottom: 25px; font-weight: 300; color: #e0e0e0; max-width: 90%; opacity: 0; }
         .btn {
-            text-decoration: none;
-            padding: 18px 35px;
-            border-radius: 60px;
-            font-size: 0.8rem;
-            font-weight: 800;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
+            text-decoration: none; padding: 18px 35px; border-radius: 60px; font-size: 0.8rem;
+            font-weight: 800; display: inline-flex; align-items: center; gap: 12px;
+            letter-spacing: 1.5px; text-transform: uppercase;
         }
+        .btn-dark { background: var(--vitality-gradient); color: #fff; box-shadow: 0 10px 25px rgba(88, 154, 49, 0.4); }
+        .dot { width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 0 15px #fff; }
 
-        .btn-dark {
-            background: var(--vitality-gradient);
-            color: #fff;
-            box-shadow: 0 10px 25px rgba(88, 154, 49, 0.4);
-        }
-
-        .dot {
-            width: 10px;
-            height: 10px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 15px #fff;
-        }
-
-        /* --- 5. TABLET & DESKTOP ENHANCEMENTS (Min-width 768px +) --- */
+        /* --- 6. DESKTOP MEDIA QUERY (≥1024px) --- */
         @media (min-width: 1024px) {
             
-            /* Navigation: Restore "Dynamic Island" Pill */
+            /* HIDE MOBILE ELEMENTS */
+            .floating-burger { display: none; }
+            .mobile-menu-overlay { display: none !important; }
+
+            /* SHOW DESKTOP ELEMENTS */
+            .desktop-menu-links { display: flex; gap: 40px; list-style: none; }
+            .btn-desktop-cta { display: inline-flex; padding: 12px 25px; font-size: 0.75rem; }
+            .desktop-sub-menu-wrapper { display: block; }
+
+            /* CONFIGURE HEADER */
             header.site-nav {
-                top: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: calc(100% - 40px);
-                max-width: 1400px;
-                height: 70px;
-                padding: 0; /* Container handles padding */
+                top: 20px; left: 50%; transform: translateX(-50%);
+                width: calc(100% - 40px); max-width: 1400px;
+                height: 70px; /* Start Height */
+                border-radius: 50px;
             }
 
-            .nav-container { padding: 0 40px; }
-            .nav-main-tier { height: 70px; }
-
-            .burger { display: none; } /* Hide burger on desktop */
-            
-            .nav-links {
-                display: flex; /* Show links */
-                flex-direction: row;
-                position: static;
-                width: auto;
-                background: transparent;
-                padding: 0;
-                border: none;
-                gap: 40px;
-                align-items: center;
+            .nav-container {
+                height: 70px; /* Lock height so it doesn't expand with header */
+                padding: 0 40px;
             }
 
-            .nav-links a.nav-item {
-                padding: 25px 0;
-                font-size: 0.75rem;
-                opacity: 0.6;
-                transition: opacity 0.3s;
+            .desktop-link-item {
+                font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+                color: var(--premium-plum); text-decoration: none; opacity: 0.6; transition: 0.3s; padding: 25px 0;
+                cursor: pointer;
             }
+            .desktop-link-item:hover { opacity: 1; color: var(--primary-green); }
 
-            .nav-links li:hover > a { opacity: 1; color: var(--primary-green); }
-
-            .nav-cta-desktop { display: inline-flex; padding: 12px 25px; font-size: 0.75rem; }
-
-            /* Sub Menu Logic (Re-enabling display) */
-            .nav-sub-tier-wrapper {
-                display: block;
-                position: relative;
-                width: 100%;
-                height: 70px;
-                pointer-events: none;
-            }
-
-            .nav-sub-tier {
+            /* SUB MENU (ABSOLUTE POSITIONING) */
+            /* We place this absolute relative to HEADER */
+            .desktop-sub-menu-wrapper {
                 position: absolute;
-                top: 0; left: 0; width: 100%; height: 100%;
-                display: none;
-                justify-content: center;
-                align-items: center;
+                top: 70px; /* Push exactly below the main tier */
+                left: 0; 
+                width: 100%; 
+                height: 70px;
                 border-top: 1px solid rgba(136, 201, 71, 0.1);
-                opacity: 0;
-                visibility: hidden;
-            }
-            .nav-sub-tier.active { display: flex; visibility: visible; pointer-events: all; }
-            
-            .sub-menu-list { display: flex; gap: 40px; list-style: none; }
-            .sub-menu-item a { 
-                color: var(--premium-plum); 
-                font-size: 0.65rem; 
-                font-weight: 700; 
-                opacity: 0.5; 
-                text-decoration: none; 
-                text-transform: uppercase; 
-                letter-spacing: 1.5px; 
-            }
-            .sub-menu-item:hover a { opacity: 1; color: var(--primary-green); }
-
-            /* Hero Desktop Layout */
-            .hero-slides-wrapper {
-                padding: 0 60px;
-                align-items: center; /* Vertically center content area */
+                pointer-events: none;
+                display: flex; justify-content: center; align-items: center;
             }
 
+            .desktop-sub-group {
+                position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                display: flex; justify-content: center; align-items: center; gap: 40px;
+                opacity: 0; visibility: hidden; pointer-events: none;
+            }
+            .desktop-sub-group.active { opacity: 1; visibility: visible; pointer-events: all; }
+
+            .sub-link {
+                font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+                color: var(--premium-plum); text-decoration: none; opacity: 0.5;
+            }
+            .sub-link:hover { opacity: 1; color: var(--primary-green); }
+
+            /* HERO */
+            .hero-slides-wrapper { padding: 0 60px; align-items: center; }
             .hero-slide {
-                position: absolute;
-                top: 0;
-                left: 60px;
-                right: 60px;
-                height: 100%;
-                padding-bottom: 10vh;
-                
-                /* Row Layout for Desktop */
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: flex-end;
+                top: 0; left: 60px; right: 60px; height: 100%; padding-bottom: 10vh;
+                flex-direction: row; justify-content: space-between; align-items: flex-end;
             }
-
-            .hero-title {
-                font-size: clamp(4rem, 9vw, 8.5rem);
-                line-height: 0.85;
-                width: auto;
-            }
-
-            .hero-aside {
-                max-width: 400px;
-                text-align: right;
-            }
-            
-            .hero-aside p {
-                font-size: 1.1rem;
-                margin-left: auto; /* Push to right */
-            }
+            .hero-title { font-size: clamp(4rem, 9vw, 8.5rem); line-height: 0.85; width: auto; }
+            .hero-aside { max-width: 400px; text-align: right; }
+            .hero-aside p { font-size: 1.1rem; margin-left: auto; }
         }
     </style>
 </head>
@@ -368,32 +230,85 @@
 
     <div class="hero-bg-container">
         <div class="hero-overlay"></div>
-        <video class="bg-layer" id="bg-media-0" muted loop playsinline autoplay>
-            <source src="https://assets.zyrosite.com/dWxL2je49ks9BZq5/6786688_assistance_body_1280x720-EZSxCiSbSX85pgJt.mp4" type="video/mp4">
+        <video class="bg-layer" id="bg-media-0" muted loop playsinline autoplay poster="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop">
+            <source src="https://assets.zyrosite.com/dWxL2je49ks9BZq5/6786688_assistance_body_1280x720-EZSxCiSbSX85pgJt.mp4" type="video/mp4" media="(min-width: 768px)">
         </video>
         <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop" class="bg-layer" id="bg-media-1" alt="Recovery">
         <img src="https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=2069&auto=format&fit=crop" class="bg-layer" id="bg-media-2" alt="Wellness">
     </div>
 
-    <header class="site-nav" id="main-header" role="navigation">
-        <div class="nav-container">
-            <div class="nav-main-tier">
-                <div class="logo">Dr. Masooma's</div>
-                <div class="burger" aria-label="Toggle Menu">&#9776;</div>
-                <ul class="nav-links">
-                    <li class="menu-trigger" data-target="performance-menu"><a href="javascript:void(0);" class="nav-item">Performance</a></li>
-                    <li class="menu-trigger" data-target="recovery-menu"><a href="javascript:void(0);" class="nav-item">Recovery</a></li>
-                    <li class="menu-trigger" data-target="clinic-menu"><a href="javascript:void(0);" class="nav-item">The Clinic</a></li>
-                    <li class="menu-trigger" data-target="contact-menu"><a href="javascript:void(0);" class="nav-item">Contact</a></li>
-                </ul>
-                <a href="javascript:void(0);" class="btn btn-dark magnetic nav-item nav-cta-desktop" aria-label="Book Now">Book Now</a>
+    <div class="floating-burger" id="burger-btn">&#9776;</div>
+
+    <div class="mobile-menu-overlay" id="mobile-menu">
+        <div class="mobile-group">
+            <div class="mobile-link-head">Performance <span class="mobile-arrow">▼</span></div>
+            <div class="mobile-sub-list">
+                <a href="#" class="mobile-sub-item">Sports Rehab</a>
+                <a href="#" class="mobile-sub-item">Gait Analysis</a>
+                <a href="#" class="mobile-sub-item">Conditioning</a>
             </div>
+        </div>
+        <div class="mobile-group">
+            <div class="mobile-link-head">Recovery <span class="mobile-arrow">▼</span></div>
+            <div class="mobile-sub-list">
+                <a href="#" class="mobile-sub-item">Manual Therapy</a>
+                <a href="#" class="mobile-sub-item">Soft Tissue</a>
+                <a href="#" class="mobile-sub-item">Cryotherapy</a>
+            </div>
+        </div>
+        <div class="mobile-group">
+            <div class="mobile-link-head">The Clinic <span class="mobile-arrow">▼</span></div>
+            <div class="mobile-sub-list">
+                <a href="#" class="mobile-sub-item">Our Story</a>
+                <a href="#" class="mobile-sub-item">Facilities</a>
+            </div>
+        </div>
+        <div class="mobile-group">
+            <div class="mobile-link-head">Contact <span class="mobile-arrow">▼</span></div>
+            <div class="mobile-sub-list">
+                <a href="#" class="mobile-sub-item">Location</a>
+                <a href="#" class="mobile-sub-item">Direct Booking</a>
+            </div>
+        </div>
+        <a href="#" class="mobile-cta-btn">Book Now</a>
+    </div>
+
+    <header class="site-nav" id="main-header">
+        <div class="nav-container">
+            <div class="logo">Dr. Masooma's</div>
             
-            <div class="nav-sub-tier-wrapper">
-                <div class="nav-sub-tier" id="performance-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="javascript:void(0);">Sports Rehab</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Gait Analysis</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Conditioning</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Prevention</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Biomechanics</a></li></ul></div>
-                <div class="nav-sub-tier" id="recovery-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="javascript:void(0);">Manual Therapy</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Soft Tissue</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Dry Needling</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Cryotherapy</a></li></ul></div>
-                <div class="nav-sub-tier" id="clinic-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="javascript:void(0);">Our Story</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Meet the Team</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Facilities</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Philosophy</a></li></ul></div>
-                <div class="nav-sub-tier" id="contact-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="javascript:void(0);">Location</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Direct Booking</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Insurance</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Inquiries</a></li></ul></div>
+            <ul class="desktop-menu-links">
+                <li><a class="desktop-link-item" data-target="perf-sub">Performance</a></li>
+                <li><a class="desktop-link-item" data-target="rec-sub">Recovery</a></li>
+                <li><a class="desktop-link-item" data-target="clinic-sub">The Clinic</a></li>
+                <li><a class="desktop-link-item" data-target="cont-sub">Contact</a></li>
+            </ul>
+
+            <a href="#" class="btn btn-dark magnetic btn-desktop-cta">Book Now</a>
+        </div>
+
+        <div class="desktop-sub-menu-wrapper">
+            <div class="desktop-sub-group" id="perf-sub">
+                <a href="#" class="sub-link">Sports Rehab</a>
+                <a href="#" class="sub-link">Gait Analysis</a>
+                <a href="#" class="sub-link">Conditioning</a>
+                <a href="#" class="sub-link">Prevention</a>
+            </div>
+            <div class="desktop-sub-group" id="rec-sub">
+                <a href="#" class="sub-link">Manual Therapy</a>
+                <a href="#" class="sub-link">Soft Tissue</a>
+                <a href="#" class="sub-link">Dry Needling</a>
+                <a href="#" class="sub-link">Cryotherapy</a>
+            </div>
+            <div class="desktop-sub-group" id="clinic-sub">
+                <a href="#" class="sub-link">Our Story</a>
+                <a href="#" class="sub-link">Meet the Team</a>
+                <a href="#" class="sub-link">Facilities</a>
+            </div>
+            <div class="desktop-sub-group" id="cont-sub">
+                <a href="#" class="sub-link">Location</a>
+                <a href="#" class="sub-link">Direct Booking</a>
+                <a href="#" class="sub-link">Inquiries</a>
             </div>
         </div>
     </header>
@@ -430,48 +345,23 @@
     <script>
         // --- VARIABLES ---
         let currentIdx = 0;
-        const slideEls = [
-            document.getElementById('slide-1'), 
-            document.getElementById('slide-2'), 
-            document.getElementById('slide-3')
-        ];
-        const bgEls = [
-            document.getElementById('bg-media-0'),
-            document.getElementById('bg-media-1'),
-            document.getElementById('bg-media-2')
-        ];
+        const slideEls = [document.getElementById('slide-1'), document.getElementById('slide-2'), document.getElementById('slide-3')];
+        const bgEls = [document.getElementById('bg-media-0'), document.getElementById('bg-media-1'), document.getElementById('bg-media-2')];
 
-        // --- 1. KEN BURNS & BACKGROUND TRANSITION ---
+        // --- ANIMATIONS ---
         const updateBackground = (newIndex, oldIndex) => {
             const incoming = bgEls[newIndex];
             const outgoing = bgEls[oldIndex];
-
-            // 1. Reset incoming state
             gsap.set(incoming, { zIndex: 2, opacity: 0, scale: 1.05 });
             gsap.set(outgoing, { zIndex: 1 });
-
-            // 2. Crossfade
             gsap.to(incoming, { opacity: 1, duration: 1.5, ease: "power2.inOut" });
-            if(outgoing) {
-                gsap.to(outgoing, { opacity: 0, duration: 1.5, delay: 0.1 });
-            }
-
-            // 3. Ken Burns Effect (Slow Scale)
-            // Animate from 1.05 to 1.15 over the duration of the slide
-            gsap.fromTo(incoming, 
-                { scale: 1.0 }, 
-                { scale: 1.1, duration: 7, ease: "none", overwrite: "auto" }
-            );
+            if(outgoing) gsap.to(outgoing, { opacity: 0, duration: 1.5, delay: 0.1 });
+            gsap.fromTo(incoming, { scale: 1.0 }, { scale: 1.1, duration: 7, ease: "none", overwrite: "auto" });
         };
 
-        // --- 2. TEXT ANIMATION LOGIC (UNCHANGED GSAP) ---
         const animateHeroText = (idx) => {
             const s = slideEls[idx];
-            
-            // Ensure visible
             gsap.set(s, { autoAlpha: 1 });
-            
-            // Re-split text to ensure cleanliness on resize
             if(s.split) s.split.revert();
             s.split = new SplitType(s.querySelector('.slide-text'), { types: 'chars' });
             
@@ -479,43 +369,85 @@
             const btn = s.querySelector('.anim-btn');
             const tl = gsap.timeline();
             
-            tl.from(s.split.chars, { 
-                opacity: 0, 
-                y: 50, 
-                filter: "blur(15px)", 
-                stagger: 0.03, 
-                duration: 1.2, 
-                ease: "power4.out" 
-            })
+            tl.from(s.split.chars, { opacity: 0, y: 50, filter: "blur(15px)", stagger: 0.03, duration: 1.2, ease: "power4.out" })
             .fromTo(aside, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, filter: "blur(0px)" }, "-=0.8")
             .from(btn, { opacity: 0, scale: 0.9, duration: 1 }, "-=0.6");
         };
 
-        // --- 3. SEQUENCE CONTROL ---
         const startHeroSequence = () => {
-            // Initial State
             updateBackground(0, null);
             animateHeroText(0);
-
-            // Loop
             setInterval(() => {
                 const prev = currentIdx; 
                 currentIdx = (currentIdx + 1) % 3;
-                
-                // Hide previous text
                 gsap.to(slideEls[prev], { autoAlpha: 0, duration: 0.5 });
-                
-                // Update BG
                 updateBackground(currentIdx, prev);
-
-                // Animate new text
                 animateHeroText(currentIdx);
             }, 6000);
         };
 
-        // --- 4. MAGNETIC BUTTONS (UNCHANGED) ---
+        // --- NAVIGATION LOGIC ---
+        const initNav = () => {
+            
+            // 1. MOBILE LOGIC
+            const burger = document.getElementById('burger-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            let isMobileOpen = false;
+
+            burger.addEventListener('click', () => {
+                isMobileOpen = !isMobileOpen;
+                mobileMenu.classList.toggle('active');
+                burger.innerHTML = isMobileOpen ? '&#10005;' : '&#9776;';
+            });
+
+            // Mobile Accordion
+            document.querySelectorAll('.mobile-group').forEach(group => {
+                group.querySelector('.mobile-link-head').addEventListener('click', () => {
+                    group.classList.toggle('open');
+                });
+            });
+
+
+            // 2. DESKTOP LOGIC
+            const header = document.getElementById('main-header');
+            const desktopLinks = document.querySelectorAll('.desktop-link-item');
+            let activeSub = null;
+
+            if(window.matchMedia("(min-width: 1024px)").matches) {
+                desktopLinks.forEach(link => {
+                    link.addEventListener('mouseenter', () => {
+                        gsap.to(header, { height: 140, borderRadius: 40, duration: 0.5, ease: "power4.out" });
+
+                        const targetId = link.getAttribute('data-target');
+                        const targetSub = document.getElementById(targetId);
+
+                        if(activeSub && activeSub !== targetSub) {
+                            gsap.set(activeSub, { autoAlpha: 0 });
+                            activeSub.classList.remove('active');
+                        }
+
+                        if(targetSub) {
+                            targetSub.classList.add('active');
+                            gsap.fromTo(targetSub, 
+                                { autoAlpha: 0, y: 15 }, 
+                                { autoAlpha: 1, y: 0, duration: 0.3, delay: 0.1 }
+                            );
+                            activeSub = targetSub;
+                        }
+                    });
+                });
+
+                header.addEventListener('mouseleave', () => {
+                    gsap.to(header, { height: 70, borderRadius: 50, duration: 0.5 });
+                    if(activeSub) {
+                        gsap.to(activeSub, { autoAlpha: 0, duration: 0.2 });
+                        activeSub = null;
+                    }
+                });
+            }
+        };
+
         const initMagneticButtons = () => {
-            // Only init on non-touch devices for performance/UX
             if(window.matchMedia("(hover: hover)").matches) {
                 document.querySelectorAll('.magnetic').forEach(btn => {
                     btn.addEventListener('mousemove', (e) => {
@@ -527,63 +459,8 @@
             }
         };
 
-        // --- 5. NAVIGATION LOGIC (UNCHANGED + MOBILE FIX) ---
-        const initNav = () => {
-            const header = document.getElementById('main-header');
-            const triggers = document.querySelectorAll('.menu-trigger');
-            const burger = document.querySelector('.burger');
-            const navLinks = document.querySelector('.nav-links');
-            let activeMenu = null;
-
-            // Desktop Hover Interaction
-            triggers.forEach(trig => {
-                trig.addEventListener('mouseenter', () => {
-                    // Disable this logic on Mobile
-                    if(window.innerWidth < 1024) return;
-
-                    const targetId = trig.getAttribute('data-target');
-                    const target = document.getElementById(targetId);
-                    if (!target || activeMenu === target) return;
-                    
-                    gsap.to(header, { height: 140, borderRadius: 40, duration: 0.5, ease: "power4.out" });
-                    
-                    if (activeMenu) {
-                        gsap.set(activeMenu, { autoAlpha: 0, y: -10, display: 'none' });
-                        activeMenu.classList.remove('active');
-                    }
-                    
-                    target.style.display = 'flex';
-                    target.classList.add('active');
-                    gsap.fromTo(target, { autoAlpha: 0, y: 15 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power2.out" });
-                    gsap.fromTo(target.querySelectorAll('.sub-menu-item'), { opacity: 0, y: 10 }, { opacity: 1, y: 0, stagger: 0.03, delay: 0.1 });
-                    activeMenu = target;
-                });
-            });
-
-            header.addEventListener('mouseleave', () => {
-                if(window.innerWidth < 1024) return;
-                
-                gsap.to(header, { height: 70, borderRadius: 50, duration: 0.5 });
-                if(activeMenu) {
-                    gsap.to(activeMenu, { autoAlpha: 0, duration: 0.2, onComplete: () => {
-                        activeMenu.style.display = 'none';
-                        activeMenu.classList.remove('active');
-                        activeMenu = null;
-                    }});
-                }
-            });
-
-            // Mobile Burger Interaction
-            burger.addEventListener('click', () => {
-                navLinks.classList.toggle('mobile-active');
-            });
-        };
-
-        // --- INITIALIZE ---
         window.addEventListener("load", () => {
-            // Hide slides initially
             slideEls.forEach(el => gsap.set(el, { autoAlpha: 0 }));
-            
             initMagneticButtons();
             initNav();
             startHeroSequence();
