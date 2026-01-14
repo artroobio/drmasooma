@@ -478,6 +478,48 @@
             * { transition: none !important; animation: none !important; }
         }
 
+        /* --- MOBILE OPTIMIZATIONS --- */
+        @media (max-width: 768px) {
+            /* Global Padding Reduction */
+            .accordion-section, .metrics-section, .profile-section, .journey-section, .portfolio-section, .premium-about-section {
+                padding: 80px 20px !important;
+            }
+            .scrolling-right { padding: 80px 20px !important; }
+            
+            /* Hero Adjustments */
+            .hero-slide {
+                flex-direction: column;
+                justify-content: flex-end;
+                align-items: flex-start;
+                padding-bottom: 120px; /* Space for bottom content */
+                padding-left: 20px;
+                padding-right: 20px;
+                left: 0; right: 0;
+            }
+            .hero-aside {
+                text-align: left;
+                max-width: 100%;
+                margin-top: 20px;
+            }
+            .hero-title {
+                font-size: 3.5rem;
+                line-height: 1;
+            }
+            
+            /* Accordion */
+            .acc-title { font-size: 1.2rem; }
+            
+            /* Horizontal Gallery */
+            .horizontal-card { margin-bottom: 20px; }
+            
+            /* Innovation Carousel */
+            .actor { width: 180px; height: 260px; }
+            
+            /* Preloader Mobile Overrides */
+            #subtitle-container { top: auto; bottom: 15dvh; }
+            .subtitle { font-size: 0.8rem; letter-spacing: 0.15em; }
+        }
+
         /* --- PRELOADER STYLES --- */
         #preloader-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -901,10 +943,26 @@
                 const loaderText = document.getElementById('loader-text');
                 if(loaderText) loaderText.style.opacity = 0;
 
+                // Responsive 3D Text Sizing
+                const isMobile = window.innerWidth < 768;
+                const textSize = isMobile ? 0.7 : 1.8;
+                const textHeight = isMobile ? 0.15 : 0.3;
+                const initialZ = isMobile ? 28 : 18; // Pull camera back more on mobile
+
+                // Adjust camera for mobile
+                if(isMobile) camera.position.set(0, 0, initialZ + 4);
+
                 const textString = "Dr. Masooma's\nAdvanced Physiorehab";
                 const geometry = new THREE.TextGeometry(textString, {
-                    font: font, size: 1.8, height: 0.3, curveSegments: 12,
-                    bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.02, bevelOffset: 0, bevelSegments: 5
+                    font: font, 
+                    size: textSize, 
+                    height: textHeight, 
+                    curveSegments: 12,
+                    bevelEnabled: true, 
+                    bevelThickness: 0.03, 
+                    bevelSize: 0.01, 
+                    bevelOffset: 0, 
+                    bevelSegments: 5
                 });
                 geometry.center();
 
@@ -940,7 +998,8 @@
                     }
                 });
 
-                tl.from(camera.position, { z: 18, duration: 5, ease: "power2.out" })
+                // Animation logic adjusted for dynamic Z
+                tl.from(camera.position, { z: initialZ + 10, duration: 5, ease: "power2.out" })
                   .to(revealPlane, { constant: 20, duration: 4, ease: "power1.inOut" }, "-=5")
                   .to("#subtitle-container", { opacity: 1, duration: 2 }, "-=2")
                   .to(".progress-line", { width: "80px", duration: 1.5, ease: "expo.out" }, "-=1.5");
@@ -1146,15 +1205,17 @@
             horizontalTl.to(track, { x: () => -(track.scrollWidth - window.innerWidth), ease: "none" });
             hCards.forEach((card) => {
                 const img = card.querySelector('img');
-                gsap.to(card, { opacity: 1, scale: 1, filter: "blur(0px)", scrollTrigger: { trigger: card, containerAnimation: horizontalTl, start: "left right-=200", toggleActions: "play none none reverse" }});
+                // Adjusted trigger to wait until card is closer to center (left 80% of view)
+                gsap.to(card, { opacity: 1, scale: 1, filter: "blur(0px)", scrollTrigger: { trigger: card, containerAnimation: horizontalTl, start: "left 80%", toggleActions: "play none none reverse" }});
                 gsap.fromTo(img, { x: "-10%" }, { x: "10%", ease: "none", scrollTrigger: { trigger: card, containerAnimation: horizontalTl, start: "left right", end: "right left", scrub: true }});
                 card.addEventListener('mouseenter', () => gsap.to(img, { scale: 1.1, filter: "brightness(1.1)", duration: 0.8 }));
                 card.addEventListener('mouseleave', () => gsap.to(img, { scale: 1, filter: "brightness(0.85)", duration: 0.8 }));
             });
             // --- METRICS ---
-            gsap.to(".metric-card", { opacity: 1, y: 0, stagger: 0.2, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: ".metrics-section", start: "top 80%" }});
+            // Delayed trigger to top 65% (closer to center)
+            gsap.to(".metric-card", { opacity: 1, y: 0, stagger: 0.2, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: ".metrics-section", start: "top 65%" }});
             document.querySelectorAll('.counter').forEach(c => {
-                gsap.to(c, { innerText: parseInt(c.getAttribute('data-target')), duration: 3, snap: { innerText: 1 }, scrollTrigger: { trigger: c, start: "top 90%" }});
+                gsap.to(c, { innerText: parseInt(c.getAttribute('data-target')), duration: 3, snap: { innerText: 1 }, scrollTrigger: { trigger: c, start: "top 70%" }});
             });
 
             // --- INNOVATION SECTION LOGIC ---
@@ -1166,7 +1227,7 @@
                         scrollObserver.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.2 });
+            }, { threshold: 0.5 }); // Increased threshold to 0.5 (50% visibility required)
             const textContent = document.querySelector('.js-about-text');
             if (textContent) scrollObserver.observe(textContent);
 
@@ -1264,7 +1325,8 @@
             initInnovationCarousel();
 
             // --- PROFILE & JOURNEY RE-SYNC ---
-            gsap.from(".animate-profile-title", { opacity: 0, y: 30, duration: 1, scrollTrigger: { trigger: "#profile-trigger", start: "top 70%" }});
+            // Adjusted trigger to top 60%
+            gsap.from(".animate-profile-title", { opacity: 0, y: 30, duration: 1, scrollTrigger: { trigger: "#profile-trigger", start: "top 60%" }});
            
             const jPath = document.getElementById('journey-progress-path');
             const jContainer = document.getElementById('journey-trigger');
@@ -1278,8 +1340,9 @@
             updatePath();
             window.addEventListener('resize', updatePath);
             document.querySelectorAll('.journey-step').forEach((step) => {
-                gsap.to(step.querySelector('.step-content'), { opacity: 1, y: 0, duration: 1.2, ease: "power4.out", scrollTrigger: { trigger: step, start: "top 75%" }});
-                gsap.to(step.querySelector('.step-dot'), { opacity: 1, scale: 1, duration: 0.4, scrollTrigger: { trigger: step, start: "top 75%" }});
+                // Adjusted triggers to top 60%
+                gsap.to(step.querySelector('.step-content'), { opacity: 1, y: 0, duration: 1.2, ease: "power4.out", scrollTrigger: { trigger: step, start: "top 60%" }});
+                gsap.to(step.querySelector('.step-dot'), { opacity: 1, scale: 1, duration: 0.4, scrollTrigger: { trigger: step, start: "top 60%" }});
             });
             // --- STICKY METHODOLOGY ---
             const scrollItems = document.querySelectorAll('.scroll-item');
@@ -1297,7 +1360,8 @@
             ScrollTrigger.create({ trigger: ".sticky-scroll-container", start: "top top", end: "bottom bottom", pin: ".sticky-left", pinSpacing: true, invalidateOnRefresh: true });
             // --- PORTFOLIO & REVEAL ---
             document.querySelectorAll('.project-card').forEach(card => {
-                gsap.to(card, { opacity: 1, y: 0, duration: 1.2, scrollTrigger: { trigger: card, start: "top 85%" }});
+                // Adjusted trigger to top 70%
+                gsap.to(card, { opacity: 1, y: 0, duration: 1.2, scrollTrigger: { trigger: card, start: "top 70%" }});
             });
             const revealTl = gsap.timeline({ scrollTrigger: { trigger: "#teeth-trigger", start: "top top", end: "+=150%", pin: true, scrub: 1 }});
             revealTl.to("#tooth-t", { yPercent: -101, ease: "none" }, 0) // Overlapping slightly for no gap
@@ -1305,8 +1369,9 @@
                     .from(".reveal-clinic-img", { scale: 1.2, filter: "blur(10px)", duration: 1 }, 0);
             // --- TESTIMONIALS ---
             const tTitle = new SplitType('#testimonial-text', { types: 'words' });
-            gsap.to(tTitle.words, { opacity: 1, filter: "blur(0px)", scale: 1, stagger: 0.06, duration: 2, scrollTrigger: { trigger: ".testimonial-section", start: "top 40%" }});
-            gsap.to("#testimonial-author", { opacity: 1, y: 0, duration: 1.2, delay: 1, scrollTrigger: { trigger: ".testimonial-section", start: "top 40%" }});
+            // Adjusted triggers to top 60%
+            gsap.to(tTitle.words, { opacity: 1, filter: "blur(0px)", scale: 1, stagger: 0.06, duration: 2, scrollTrigger: { trigger: ".testimonial-section", start: "top 60%" }});
+            gsap.to("#testimonial-author", { opacity: 1, y: 0, duration: 1.2, delay: 1, scrollTrigger: { trigger: ".testimonial-section", start: "top 60%" }});
             gsap.to("#parallax-bg", { y: "15%", scrollTrigger: { trigger: ".testimonial-section", start: "top bottom", end: "bottom top", scrub: true }});
             // --- MAGNETIC ---
             document.querySelectorAll('.magnetic').forEach(btn => {
