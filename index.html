@@ -3,355 +3,590 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Dr. Masooma's - Elite Physiotherapy and Human Performance Clinic. Expert motion and precision recovery.">
-    <title>Dr. Masooma's | Expert Motion & Precision Recovery</title>
+    <title>Dr. Masooma's — Hero Section</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        /* --- 1. VARIABLES & RESET (MOBILE DEFAULT) --- */
         :root {
-            --color-primary: #589a31;
-            --color-primary-dark: #2C5E1A;
-            --color-accent: #a3ff47;
-            --color-plum: #2D2331;
-            --color-white: #ffffff;
-            --color-bg: #0a0a0a;
-            --glass-bg: rgba(255, 255, 255, 0.9);
-            --transition-main: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            --nav-height: 64px;
+            --primary-green: #589a31;
+            --vitality-gradient: linear-gradient(135deg, #a3ff47 0%, #589a31 50%, #2C5E1A 100%);
+            --off-white: #F4F7F2;
+            --glass-border: rgba(88, 154, 49, 0.25);
+            --premium-plum: #2D2331;
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --nav-blur: 30px;
         }
 
-        /* --- Reset & Base --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--color-bg);
-            color: var(--color-white);
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
+            background-color: #000;
+            color: #fff;
             overflow-x: hidden;
+            width: 100%;
         }
 
-        /* --- Navigation --- */
-        .header {
+        /* --- 2. BACKGROUND MEDIA LAYERS (HTML5 Replacement for WebGL) --- */
+        .hero-bg-container {
             position: fixed;
-            top: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 1200px;
-            height: var(--nav-height);
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 100px;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            padding: 0 1.5rem;
-            border: 1px solid rgba(88, 154, 49, 0.2);
-            transition: var(--transition-main);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            z-index: -1;
+            overflow: hidden;
         }
 
-        .nav-content {
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0; /* Hidden by default */
+            z-index: 1;
+            will-change: transform, opacity;
+        }
+
+        .bg-layer.active {
+            z-index: 2; /* Bring active to front */
+        }
+
+        /* Dark Overlay */
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(45,35,49,0.4) 0%, transparent 50%, rgba(45,35,49,0.3) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* --- 3. NAVIGATION (MOBILE FIRST) --- */
+        header.site-nav {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            width: calc(100% - 20px);
+            height: 60px;
+            z-index: 1000;
+            background: var(--nav-bg);
+            backdrop-filter: blur(var(--nav-blur));
+            -webkit-backdrop-filter: blur(var(--nav-blur));
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(45, 35, 49, 0.1);
+            transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.6s ease;
+            overflow: hidden;
+        }
+
+        .nav-container {
+            width: 100%;
+            height: 100%;
+            padding: 0 20px;
+        }
+
+        .nav-main-tier {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 60px;
             width: 100%;
         }
 
         .logo {
+            font-size: 1rem;
             font-weight: 800;
-            text-transform: uppercase;
             letter-spacing: 1px;
-            font-size: 0.9rem;
-            background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+            text-transform: uppercase;
+            background: var(--vitality-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-decoration: none;
         }
 
-        /* Desktop Nav - Hidden on Mobile */
+        .burger {
+            display: block; /* Visible on mobile */
+            cursor: pointer;
+            font-size: 1.4rem;
+            color: var(--premium-plum);
+            padding: 5px;
+        }
+
+        /* Links hidden on mobile, shown via JS toggling class */
         .nav-links {
-            display: none;
-            list-style: none;
-            gap: 2rem;
+            display: none; 
+            flex-direction: column;
+            gap: 15px;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .nav-links.mobile-active {
+            display: flex;
         }
 
-        .nav-links a {
+        .nav-links a.nav-item {
             text-decoration: none;
-            color: var(--color-plum);
-            font-size: 0.75rem;
+            color: var(--premium-plum);
+            font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.7;
-            transition: 0.3s;
+            letter-spacing: 1.5px;
+            display: block;
+            padding: 10px 0;
         }
 
-        .nav-links a:hover { opacity: 1; color: var(--color-primary); }
+        /* Sub-menu hidden on mobile to keep layout clean */
+        .nav-sub-tier-wrapper { display: none; }
+        
+        /* Book Now button hidden on very small screens in nav header to save space */
+        .nav-cta-desktop { display: none; }
 
-        /* Mobile Menu Trigger */
-        .menu-toggle {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 2px;
-            background: var(--color-plum);
-            transition: 0.3s;
-        }
-
-        /* Mobile Menu Overlay */
-        .mobile-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100dvh;
-            background: var(--color-white);
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-            padding: 8rem 2rem 2rem;
-            transform: translateY(-100%);
-            transition: var(--transition-main);
-        }
-
-        .mobile-nav.active { transform: translateY(0); }
-
-        .mobile-nav a {
-            color: var(--color-plum);
-            text-decoration: none;
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-        }
-
-        /* --- Hero Section --- */
-        .hero {
+        /* --- 4. HERO SECTION CONTENT (MOBILE FIRST) --- */
+        .hero-section {
             position: relative;
+            height: 100vh;
             height: 100dvh;
             width: 100%;
-            overflow: hidden;
+            z-index: 10;
+        }
+
+        .hero-slides-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            padding: 0 20px;
             display: flex;
-            align-items: flex-end;
-            padding-bottom: 4rem;
+            /* Mobile: Stack items bottom */
+            align-items: flex-end; 
+            padding-bottom: 80px; 
         }
 
-        /* Visual Background */
-        .hero-bg {
+        .hero-slide {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+            bottom: 80px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column; /* Mobile: Stack vertical */
+            justify-content: flex-end;
+            align-items: flex-start;
+            gap: 20px;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
-        .hero-bg img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.6);
-        }
-
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, transparent 60%);
-        }
-
-        .hero-content {
-            width: 90%;
-            margin: 0 auto;
-            max-width: 1200px;
-            z-index: 2;
+        .hero-slide.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
         }
 
         .hero-title {
-            font-size: clamp(3rem, 12vw, 8rem);
-            line-height: 0.9;
+            font-size: clamp(3rem, 12vw, 4.5rem); /* Responsive text sizing */
             font-weight: 400;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.03em;
+            line-height: 0.95;
+            letter-spacing: -0.04em;
+            color: #fff;
+            text-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            word-break: break-word;
+            width: 100%;
         }
 
-        .hero-desc {
-            max-width: 450px;
+        .hero-aside {
+            width: 100%;
+            text-align: left;
+        }
+
+        .hero-aside p {
             font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
             font-weight: 300;
-            opacity: 0.9;
-            margin-bottom: 2rem;
+            color: #e0e0e0;
+            max-width: 90%;
+            opacity: 0; /* JS handles fade in */
         }
 
         /* Buttons */
-        .cta-group {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
         .btn {
+            text-decoration: none;
+            padding: 18px 35px;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            font-weight: 800;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            padding: 1.25rem 2.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
+            gap: 12px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.75rem;
-            transition: var(--transition-main);
         }
 
-        .btn-primary {
-            background: var(--color-primary);
-            color: var(--color-white);
-            box-shadow: 0 10px 30px rgba(88, 154, 49, 0.3);
+        .btn-dark {
+            background: var(--vitality-gradient);
+            color: #fff;
+            box-shadow: 0 10px 25px rgba(88, 154, 49, 0.4);
         }
 
-        .btn-primary:hover {
-            background: var(--color-accent);
-            color: var(--color-plum);
-            transform: translateY(-3px);
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #fff;
         }
 
-        /* --- Media Queries --- */
-
-        /* Tablet (≥768px) */
-        @media (min-width: 768px) {
-            .cta-group { flex-direction: row; }
-            .hero-desc { font-size: 1.15rem; }
-            .header { width: 95%; padding: 0 2.5rem; }
-        }
-
-        /* Desktop (≥1024px) */
+        /* --- 5. TABLET & DESKTOP ENHANCEMENTS (Min-width 768px +) --- */
         @media (min-width: 1024px) {
-            .nav-links { display: flex; }
-            .menu-toggle { display: none; }
-            .hero-content {
-                display: flex;
+            
+            /* Navigation: Restore "Dynamic Island" Pill */
+            header.site-nav {
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: calc(100% - 40px);
+                max-width: 1400px;
+                height: 70px;
+                padding: 0; /* Container handles padding */
+            }
+
+            .nav-container { padding: 0 40px; }
+            .nav-main-tier { height: 70px; }
+
+            .burger { display: none; } /* Hide burger on desktop */
+            
+            .nav-links {
+                display: flex; /* Show links */
+                flex-direction: row;
+                position: static;
+                width: auto;
+                background: transparent;
+                padding: 0;
+                border: none;
+                gap: 40px;
+                align-items: center;
+            }
+
+            .nav-links a.nav-item {
+                padding: 25px 0;
+                font-size: 0.75rem;
+                opacity: 0.6;
+                transition: opacity 0.3s;
+            }
+
+            .nav-links li:hover > a { opacity: 1; color: var(--primary-green); }
+
+            .nav-cta-desktop { display: inline-flex; padding: 12px 25px; font-size: 0.75rem; }
+
+            /* Sub Menu Logic (Re-enabling display) */
+            .nav-sub-tier-wrapper {
+                display: block;
+                position: relative;
+                width: 100%;
+                height: 70px;
+                pointer-events: none;
+            }
+
+            .nav-sub-tier {
+                position: absolute;
+                top: 0; left: 0; width: 100%; height: 100%;
+                display: none;
+                justify-content: center;
+                align-items: center;
+                border-top: 1px solid rgba(136, 201, 71, 0.1);
+                opacity: 0;
+                visibility: hidden;
+            }
+            .nav-sub-tier.active { display: flex; visibility: visible; pointer-events: all; }
+            
+            .sub-menu-list { display: flex; gap: 40px; list-style: none; }
+            .sub-menu-item a { 
+                color: var(--premium-plum); 
+                font-size: 0.65rem; 
+                font-weight: 700; 
+                opacity: 0.5; 
+                text-decoration: none; 
+                text-transform: uppercase; 
+                letter-spacing: 1.5px; 
+            }
+            .sub-menu-item:hover a { opacity: 1; color: var(--primary-green); }
+
+            /* Hero Desktop Layout */
+            .hero-slides-wrapper {
+                padding: 0 60px;
+                align-items: center; /* Vertically center content area */
+            }
+
+            .hero-slide {
+                position: absolute;
+                top: 0;
+                left: 60px;
+                right: 60px;
+                height: 100%;
+                padding-bottom: 10vh;
+                
+                /* Row Layout for Desktop */
+                flex-direction: row;
                 justify-content: space-between;
                 align-items: flex-end;
             }
-            .hero-desc-wrapper {
-                text-align: right;
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
+
+            .hero-title {
+                font-size: clamp(4rem, 9vw, 8.5rem);
+                line-height: 0.85;
+                width: auto;
             }
-            .hero-title { margin-bottom: 0; }
+
+            .hero-aside {
+                max-width: 400px;
+                text-align: right;
+            }
+            
+            .hero-aside p {
+                font-size: 1.1rem;
+                margin-left: auto; /* Push to right */
+            }
         }
     </style>
 </head>
 <body>
 
-    <header class="header" id="header">
-        <div class="nav-content">
-            <a href="#" class="logo">Dr. Masooma's</a>
-            
-            <nav class="nav-links">
-                <li><a href="#performance">Performance</a></li>
-                <li><a href="#recovery">Recovery</a></li>
-                <li><a href="#clinic">The Clinic</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </nav>
+    <div class="hero-bg-container">
+        <div class="hero-overlay"></div>
+        <video class="bg-layer" id="bg-media-0" muted loop playsinline autoplay>
+            <source src="https://assets.zyrosite.com/dWxL2je49ks9BZq5/6786688_assistance_body_1280x720-EZSxCiSbSX85pgJt.mp4" type="video/mp4">
+        </video>
+        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop" class="bg-layer" id="bg-media-1" alt="Recovery">
+        <img src="https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=2069&auto=format&fit=crop" class="bg-layer" id="bg-media-2" alt="Wellness">
+    </div>
 
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <a href="#" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.65rem;">Book Now</a>
-                <button class="menu-toggle" aria-label="Toggle Menu" id="menu-btn">
-                    <span></span>
-                    <span></span>
-                </button>
+    <header class="site-nav" id="main-header" role="navigation">
+        <div class="nav-container">
+            <div class="nav-main-tier">
+                <div class="logo">Dr. Masooma's</div>
+                <div class="burger" aria-label="Toggle Menu">&#9776;</div>
+                <ul class="nav-links">
+                    <li class="menu-trigger" data-target="performance-menu"><a href="javascript:void(0);" class="nav-item">Performance</a></li>
+                    <li class="menu-trigger" data-target="recovery-menu"><a href="javascript:void(0);" class="nav-item">Recovery</a></li>
+                    <li class="menu-trigger" data-target="clinic-menu"><a href="javascript:void(0);" class="nav-item">The Clinic</a></li>
+                    <li class="menu-trigger" data-target="contact-menu"><a href="javascript:void(0);" class="nav-item">Contact</a></li>
+                </ul>
+                <a href="javascript:void(0);" class="btn btn-dark magnetic nav-item nav-cta-desktop" aria-label="Book Now">Book Now</a>
+            </div>
+            
+            <div class="nav-sub-tier-wrapper">
+                <div class="nav-sub-tier" id="performance-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="javascript:void(0);">Sports Rehab</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Gait Analysis</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Conditioning</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Prevention</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Biomechanics</a></li></ul></div>
+                <div class="nav-sub-tier" id="recovery-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="javascript:void(0);">Manual Therapy</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Soft Tissue</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Dry Needling</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Cryotherapy</a></li></ul></div>
+                <div class="nav-sub-tier" id="clinic-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="javascript:void(0);">Our Story</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Meet the Team</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Facilities</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Philosophy</a></li></ul></div>
+                <div class="nav-sub-tier" id="contact-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="javascript:void(0);">Location</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Direct Booking</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Insurance</a></li><li class="sub-menu-item"><a href="javascript:void(0);">Inquiries</a></li></ul></div>
             </div>
         </div>
     </header>
 
-    <nav class="mobile-nav" id="mobile-menu">
-        <a href="#performance">Performance</a>
-        <a href="#recovery">Recovery</a>
-        <a href="#clinic">The Clinic</a>
-        <a href="#contact">Contact</a>
-    </nav>
-
-    <main>
-        <section class="hero">
-            <div class="hero-bg">
-                <div class="hero-overlay"></div>
-                <img src="https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=2069&auto=format&fit=crop" alt="Elite Wellness Background">
-            </div>
-
-            <div class="hero-content">
-                <div class="hero-text-wrapper">
-                    <h1 class="hero-title">Expert<br>Motion.</h1>
-                </div>
-
-                <div class="hero-desc-wrapper">
-                    <p class="hero-desc">
-                        Advanced biomechanics restoring your body to its peak functional state. Experience the gold standard in human performance.
-                    </p>
-                    <div class="cta-group">
-                        <a href="#" class="btn btn-primary">Our Approach</a>
-                    </div>
+    <section class="hero-section">
+        <div class="hero-slides-wrapper">
+            <div class="hero-slide active" id="slide-1">
+                <h1 class="hero-title slide-text">Expert<br>Motion.</h1>
+                <div class="hero-aside slide-aside">
+                    <p class="anim-p">Advanced biomechanics restoring your body to its peak functional state.</p>
+                    <a href="#" class="btn btn-dark magnetic anim-btn">View Treatment <span class="dot"></span></a>
                 </div>
             </div>
-        </section>
-    </main>
+            <div class="hero-slide" id="slide-2">
+                <h1 class="hero-title slide-text">Precision<br>Recovery.</h1>
+                <div class="hero-aside slide-aside">
+                    <p class="anim-p">Evidence-based protocols designed for elite wellness seekers.</p>
+                    <a href="#" class="btn btn-dark magnetic anim-btn">Our Approach <span class="dot"></span></a>
+                </div>
+            </div>
+            <div class="hero-slide" id="slide-3">
+                <h1 class="hero-title slide-text">Elite<br>Wellness.</h1>
+                <div class="hero-aside slide-aside">
+                    <p class="anim-p">Experience the gold standard in human performance and scientific physiotherapy.</p>
+                    <a href="#" class="btn btn-dark magnetic anim-btn">Meet Dr. Masooma <span class="dot"></span></a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://unpkg.com/split-type"></script>
+
     <script>
-        // Mobile Menu Toggle
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('active');
-            const spans = menuBtn.querySelectorAll('span');
-            spans[0].style.transform = mobileMenu.classList.contains('active') ? 'rotate(45deg) translate(5px, 5px)' : 'none';
-            spans[1].style.transform = mobileMenu.classList.contains('active') ? 'rotate(-45deg) translate(5px, -5px)' : 'none';
-        });
+        // --- VARIABLES ---
+        let currentIdx = 0;
+        const slideEls = [
+            document.getElementById('slide-1'), 
+            document.getElementById('slide-2'), 
+            document.getElementById('slide-3')
+        ];
+        const bgEls = [
+            document.getElementById('bg-media-0'),
+            document.getElementById('bg-media-1'),
+            document.getElementById('bg-media-2')
+        ];
 
-        // Close menu on link click
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('active');
-            });
-        });
+        // --- 1. KEN BURNS & BACKGROUND TRANSITION ---
+        const updateBackground = (newIndex, oldIndex) => {
+            const incoming = bgEls[newIndex];
+            const outgoing = bgEls[oldIndex];
 
-        // Entrance Animations
-        window.addEventListener('load', () => {
-            const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1.2 }});
+            // 1. Reset incoming state
+            gsap.set(incoming, { zIndex: 2, opacity: 0, scale: 1.05 });
+            gsap.set(outgoing, { zIndex: 1 });
 
-            tl.from(".header", { y: -100, opacity: 0 })
-              .from(".hero-title", { y: 100, opacity: 0, stagger: 0.2 }, "-=0.8")
-              .from(".hero-desc", { y: 30, opacity: 0 }, "-=1")
-              .from(".cta-group", { scale: 0.9, opacity: 0 }, "-=1");
-        });
-
-        // Scroll Effect for Header
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.style.width = '100%';
-                header.style.top = '0';
-                header.style.borderRadius = '0';
-            } else {
-                header.style.width = '90%';
-                header.style.top = '1rem';
-                header.style.borderRadius = '100px';
+            // 2. Crossfade
+            gsap.to(incoming, { opacity: 1, duration: 1.5, ease: "power2.inOut" });
+            if(outgoing) {
+                gsap.to(outgoing, { opacity: 0, duration: 1.5, delay: 0.1 });
             }
+
+            // 3. Ken Burns Effect (Slow Scale)
+            // Animate from 1.05 to 1.15 over the duration of the slide
+            gsap.fromTo(incoming, 
+                { scale: 1.0 }, 
+                { scale: 1.1, duration: 7, ease: "none", overwrite: "auto" }
+            );
+        };
+
+        // --- 2. TEXT ANIMATION LOGIC (UNCHANGED GSAP) ---
+        const animateHeroText = (idx) => {
+            const s = slideEls[idx];
+            
+            // Ensure visible
+            gsap.set(s, { autoAlpha: 1 });
+            
+            // Re-split text to ensure cleanliness on resize
+            if(s.split) s.split.revert();
+            s.split = new SplitType(s.querySelector('.slide-text'), { types: 'chars' });
+            
+            const aside = s.querySelector('.hero-aside p');
+            const btn = s.querySelector('.anim-btn');
+            const tl = gsap.timeline();
+            
+            tl.from(s.split.chars, { 
+                opacity: 0, 
+                y: 50, 
+                filter: "blur(15px)", 
+                stagger: 0.03, 
+                duration: 1.2, 
+                ease: "power4.out" 
+            })
+            .fromTo(aside, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, filter: "blur(0px)" }, "-=0.8")
+            .from(btn, { opacity: 0, scale: 0.9, duration: 1 }, "-=0.6");
+        };
+
+        // --- 3. SEQUENCE CONTROL ---
+        const startHeroSequence = () => {
+            // Initial State
+            updateBackground(0, null);
+            animateHeroText(0);
+
+            // Loop
+            setInterval(() => {
+                const prev = currentIdx; 
+                currentIdx = (currentIdx + 1) % 3;
+                
+                // Hide previous text
+                gsap.to(slideEls[prev], { autoAlpha: 0, duration: 0.5 });
+                
+                // Update BG
+                updateBackground(currentIdx, prev);
+
+                // Animate new text
+                animateHeroText(currentIdx);
+            }, 6000);
+        };
+
+        // --- 4. MAGNETIC BUTTONS (UNCHANGED) ---
+        const initMagneticButtons = () => {
+            // Only init on non-touch devices for performance/UX
+            if(window.matchMedia("(hover: hover)").matches) {
+                document.querySelectorAll('.magnetic').forEach(btn => {
+                    btn.addEventListener('mousemove', (e) => {
+                        const r = btn.getBoundingClientRect();
+                        gsap.to(btn, { x: (e.clientX - r.left - r.width/2) * 0.4, y: (e.clientY - r.top - r.height/2) * 0.4, duration: 0.3 });
+                    });
+                    btn.addEventListener('mouseleave', () => gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1,0.3)" }));
+                });
+            }
+        };
+
+        // --- 5. NAVIGATION LOGIC (UNCHANGED + MOBILE FIX) ---
+        const initNav = () => {
+            const header = document.getElementById('main-header');
+            const triggers = document.querySelectorAll('.menu-trigger');
+            const burger = document.querySelector('.burger');
+            const navLinks = document.querySelector('.nav-links');
+            let activeMenu = null;
+
+            // Desktop Hover Interaction
+            triggers.forEach(trig => {
+                trig.addEventListener('mouseenter', () => {
+                    // Disable this logic on Mobile
+                    if(window.innerWidth < 1024) return;
+
+                    const targetId = trig.getAttribute('data-target');
+                    const target = document.getElementById(targetId);
+                    if (!target || activeMenu === target) return;
+                    
+                    gsap.to(header, { height: 140, borderRadius: 40, duration: 0.5, ease: "power4.out" });
+                    
+                    if (activeMenu) {
+                        gsap.set(activeMenu, { autoAlpha: 0, y: -10, display: 'none' });
+                        activeMenu.classList.remove('active');
+                    }
+                    
+                    target.style.display = 'flex';
+                    target.classList.add('active');
+                    gsap.fromTo(target, { autoAlpha: 0, y: 15 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power2.out" });
+                    gsap.fromTo(target.querySelectorAll('.sub-menu-item'), { opacity: 0, y: 10 }, { opacity: 1, y: 0, stagger: 0.03, delay: 0.1 });
+                    activeMenu = target;
+                });
+            });
+
+            header.addEventListener('mouseleave', () => {
+                if(window.innerWidth < 1024) return;
+                
+                gsap.to(header, { height: 70, borderRadius: 50, duration: 0.5 });
+                if(activeMenu) {
+                    gsap.to(activeMenu, { autoAlpha: 0, duration: 0.2, onComplete: () => {
+                        activeMenu.style.display = 'none';
+                        activeMenu.classList.remove('active');
+                        activeMenu = null;
+                    }});
+                }
+            });
+
+            // Mobile Burger Interaction
+            burger.addEventListener('click', () => {
+                navLinks.classList.toggle('mobile-active');
+            });
+        };
+
+        // --- INITIALIZE ---
+        window.addEventListener("load", () => {
+            // Hide slides initially
+            slideEls.forEach(el => gsap.set(el, { autoAlpha: 0 }));
+            
+            initMagneticButtons();
+            initNav();
+            startHeroSequence();
         });
     </script>
 </body>
