@@ -1,470 +1,230 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Masooma's — Hero Section</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+    /* --- GLOBAL FIX FOR SIZING --- */
+    * { box-sizing: border-box; }
+
+    /* --- VARIABLES --- */
+    :root { --electric-lime: #a3ff47; --premium-plum: #2D2331; }
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    /* --- VISIBILITY GATING --- */
+    .view-desktop { display: none !important; }
+    .view-mobile { display: block !important; }
 
-    <style>
-        /* --- 1. GLOBAL VARIABLES & RESET --- */
-        :root {
-            --primary-green: #589a31;
-            --vitality-gradient: linear-gradient(135deg, #a3ff47 0%, #589a31 50%, #2C5E1A 100%);
-            --off-white: #F4F7F2;
-            --glass-border: rgba(88, 154, 49, 0.25);
-            --premium-plum: #2D2331;
-            --nav-bg: rgba(255, 255, 255, 0.95);
-            --nav-blur: 30px;
-        }
+    @media (min-width: 1024px) {
+        .view-desktop { display: block !important; }
+        .view-mobile { display: none !important; }
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* --- SHARED TYPOGRAPHY --- */
+    .green-accent {
+        color: var(--electric-lime); font-size: 0.8rem; text-transform: uppercase;
+        letter-spacing: 4px; font-weight: 800; display: block; margin-bottom: 20px;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #000;
-            color: #fff;
-            overflow-x: hidden;
-            width: 100%;
-        }
-
-        /* --- 2. BACKGROUND MEDIA --- */
-        .hero-bg-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
-            z-index: -1; overflow: hidden;
-        }
-        .bg-layer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; opacity: 0; z-index: 1; will-change: transform, opacity;
-        }
-        .bg-layer.active { z-index: 2; }
-        .hero-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(180deg, rgba(45,35,49,0.4) 0%, transparent 50%, rgba(45,35,49,0.3) 100%);
-            z-index: 2; pointer-events: none;
-        }
-
-        /* --- 3. INDEPENDENT UI ELEMENTS --- */
-
-        /* 3A. Floating Burger Button (Extracted for Clickability) */
-        .floating-burger {
-            position: fixed;
-            top: 25px; 
-            right: 25px;
-            z-index: 2000; /* Highest Priority */
-            font-size: 1.5rem;
-            color: var(--premium-plum);
-            cursor: pointer;
-            width: 40px; height: 40px;
-            display: flex; justify-content: center; align-items: center;
-            background: rgba(255,255,255,0.8);
-            border-radius: 50%;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-        .floating-burger:hover { transform: scale(1.1); }
-
-        /* 3B. Mobile Menu Overlay */
-        .mobile-menu-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #fff;
-            z-index: 1500; /* Above Header (1000), Below Burger (2000) */
-            padding: 90px 30px 40px;
-            transform: translateX(100%);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow-y: auto;
-            display: flex; flex-direction: column; gap: 10px;
-        }
-        .mobile-menu-overlay.active { transform: translateX(0); }
-
-        /* Mobile Menu Items */
-        .mobile-group { border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
-        .mobile-link-head {
-            font-size: 1.1rem; font-weight: 700; text-transform: uppercase; color: var(--premium-plum);
-            display: flex; justify-content: space-between; align-items: center; padding: 15px 0; cursor: pointer;
-        }
-        .mobile-arrow { font-size: 0.8rem; transition: transform 0.3s; }
-        .mobile-group.open .mobile-arrow { transform: rotate(180deg); }
-        .mobile-sub-list { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; padding-left: 10px; }
-        .mobile-group.open .mobile-sub-list { max-height: 400px; }
-        .mobile-sub-item { display: block; text-decoration: none; color: #666; font-size: 0.9rem; padding: 8px 0; font-weight: 500; }
-        .mobile-cta-btn {
-            margin-top: 30px; text-align: center; display: inline-block; width: 100%; padding: 15px; 
-            background: var(--vitality-gradient); color: #fff; border-radius: 50px; text-decoration: none; font-weight: 800; text-transform: uppercase;
-        }
+    /* --- MOBILE SPECIFIC STYLES (Vertical Stack) --- */
+    .mob-gallery-section {
+        background-color: var(--premium-plum); 
+        padding: 80px 20px; 
+        width: 100%;
+        overflow-x: hidden; /* Extra safety */
+    }
+    .mob-gallery-intro { margin-bottom: 60px; text-align: left; }
+    .mob-gallery-intro h2 { font-size: 3rem; color: #fff; line-height: 1; margin: 0; }
+    
+    .mob-card-stack { display: flex; flex-direction: column; gap: 40px; }
+    
+    .mob-card {
+        position: relative; width: 100%; height: 400px; 
+        border-radius: 30px; overflow: hidden;
+        border: 1px solid rgba(163, 255, 71, 0.3);
+    }
+    .mob-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85); }
+    .mob-card-content {
+        position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px;
+        background: linear-gradient(0deg, var(--premium-plum) 0%, transparent 100%);
+        color: white;
+    }
+    .mob-card-content h3 { font-size: 1.3rem; margin: 0; font-weight: 600; }
 
 
-        /* --- 4. MAIN HEADER (Desktop & Logo) --- */
-        header.site-nav {
-            position: fixed;
-            top: 10px; left: 10px;
-            width: calc(100% - 20px); /* Mobile Width */
-            height: 60px; /* Mobile Height */
-            z-index: 1000;
-            background: var(--nav-bg);
-            backdrop-filter: blur(var(--nav-blur));
-            -webkit-backdrop-filter: blur(var(--nav-blur));
-            border-radius: 30px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 40px rgba(45, 35, 49, 0.1);
-            transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.5s ease;
-            overflow: hidden; /* Needed for dynamic island shape */
-        }
+    /* --- DESKTOP SPECIFIC STYLES (Horizontal Scroll) --- */
+    .desk-horizontal-section {
+        position: relative; width: 100%; height: 100vh; overflow: hidden;
+        background-color: var(--premium-plum); display: flex; align-items: center;
+    }
+    
+    .desk-track {
+        display: flex; height: 100%; width: fit-content; align-items: center; padding: 0 10vw;
+        will-change: transform;
+    }
 
-        .nav-container {
-            width: 100%; height: 60px; padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+    .desk-intro { min-width: 40vw; padding-right: 5vw; flex-shrink: 0; }
+    .desk-intro h2 { font-size: 4.5rem; color: #fff; line-height: 1; letter-spacing: -3px; margin: 0; }
 
-        .logo {
-            font-size: 1rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
-            background: var(--vitality-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+    .desk-card {
+        min-width: 500px; height: 60vh; margin-right: 80px; position: relative;
+        border-radius: 40px; overflow: hidden; border: 1px solid rgba(163, 255, 71, 0.3);
+        transform: scale(0.9); opacity: 0; filter: blur(20px); flex-shrink: 0;
+    }
+    .desk-card img {
+        width: 120%; height: 100%; object-fit: cover; filter: brightness(0.85);
+        position: absolute; left: -10%; top: 0;
+    }
+    .desk-card-content {
+        position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px;
+        background: linear-gradient(0deg, var(--premium-plum) 0%, transparent 100%);
+        color: white; pointer-events: none;
+    }
+    .desk-card-content h3 { font-size: 1.5rem; font-weight: 600; margin: 0; }
+</style>
 
-        /* Desktop Elements - Initially Hidden */
-        .desktop-menu-links { display: none; }
-        .btn-desktop-cta { display: none; }
-        .desktop-sub-menu-wrapper { display: none; }
 
-
-        /* --- 5. HERO CONTENT --- */
-        .hero-section { position: relative; height: 100vh; height: 100dvh; width: 100%; z-index: 10; }
-        .hero-slides-wrapper {
-            position: relative; width: 100%; height: 100%; padding: 0 20px;
-            display: flex; align-items: flex-end; padding-bottom: 80px;
-        }
-        .hero-slide {
-            position: absolute; bottom: 80px; left: 20px; right: 20px;
-            display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
-            gap: 20px; opacity: 0; visibility: hidden; pointer-events: none;
-        }
-        .hero-slide.active { opacity: 1; visibility: visible; pointer-events: all; }
-        .hero-title {
-            font-size: clamp(3rem, 12vw, 4.5rem); font-weight: 400; line-height: 0.95;
-            letter-spacing: -0.04em; color: #fff; text-shadow: 0 10px 40px rgba(0,0,0,0.4); width: 100%;
-        }
-        .hero-aside p { font-size: 1rem; line-height: 1.5; margin-bottom: 25px; font-weight: 300; color: #e0e0e0; max-width: 90%; opacity: 0; }
-        .btn {
-            text-decoration: none; padding: 18px 35px; border-radius: 60px; font-size: 0.8rem;
-            font-weight: 800; display: inline-flex; align-items: center; gap: 12px;
-            letter-spacing: 1.5px; text-transform: uppercase;
-        }
-        .btn-dark { background: var(--vitality-gradient); color: #fff; box-shadow: 0 10px 25px rgba(88, 154, 49, 0.4); }
-        .dot { width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 0 15px #fff; }
-
-        /* --- 6. DESKTOP MEDIA QUERY (≥1024px) --- */
-        @media (min-width: 1024px) {
-            
-            /* HIDE MOBILE ELEMENTS */
-            .floating-burger { display: none; }
-            .mobile-menu-overlay { display: none !important; }
-
-            /* SHOW DESKTOP ELEMENTS */
-            .desktop-menu-links { display: flex; gap: 40px; list-style: none; }
-            .btn-desktop-cta { display: inline-flex; padding: 12px 25px; font-size: 0.75rem; }
-            .desktop-sub-menu-wrapper { display: block; }
-
-            /* CONFIGURE HEADER */
-            header.site-nav {
-                top: 20px; left: 50%; transform: translateX(-50%);
-                width: calc(100% - 40px); max-width: 1400px;
-                height: 70px; /* Start Height */
-                border-radius: 50px;
-            }
-
-            .nav-container {
-                height: 70px; /* Lock height so it doesn't expand with header */
-                padding: 0 40px;
-            }
-
-            .desktop-link-item {
-                font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
-                color: var(--premium-plum); text-decoration: none; opacity: 0.6; transition: 0.3s; padding: 25px 0;
-                cursor: pointer;
-            }
-            .desktop-link-item:hover { opacity: 1; color: var(--primary-green); }
-
-            /* SUB MENU (ABSOLUTE POSITIONING) */
-            /* We place this absolute relative to HEADER */
-            .desktop-sub-menu-wrapper {
-                position: absolute;
-                top: 70px; /* Push exactly below the main tier */
-                left: 0; 
-                width: 100%; 
-                height: 70px;
-                border-top: 1px solid rgba(136, 201, 71, 0.1);
-                pointer-events: none;
-                display: flex; justify-content: center; align-items: center;
-            }
-
-            .desktop-sub-group {
-                position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-                display: flex; justify-content: center; align-items: center; gap: 40px;
-                opacity: 0; visibility: hidden; pointer-events: none;
-            }
-            .desktop-sub-group.active { opacity: 1; visibility: visible; pointer-events: all; }
-
-            .sub-link {
-                font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
-                color: var(--premium-plum); text-decoration: none; opacity: 0.5;
-            }
-            .sub-link:hover { opacity: 1; color: var(--primary-green); }
-
-            /* HERO */
-            .hero-slides-wrapper { padding: 0 60px; align-items: center; }
-            .hero-slide {
-                top: 0; left: 60px; right: 60px; height: 100%; padding-bottom: 10vh;
-                flex-direction: row; justify-content: space-between; align-items: flex-end;
-            }
-            .hero-title { font-size: clamp(4rem, 9vw, 8.5rem); line-height: 0.85; width: auto; }
-            .hero-aside { max-width: 400px; text-align: right; }
-            .hero-aside p { font-size: 1.1rem; margin-left: auto; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="hero-bg-container">
-        <div class="hero-overlay"></div>
-        <video class="bg-layer" id="bg-media-0" muted loop playsinline autoplay poster="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop">
-            <source src="https://assets.zyrosite.com/dWxL2je49ks9BZq5/6786688_assistance_body_1280x720-EZSxCiSbSX85pgJt.mp4" type="video/mp4" media="(min-width: 768px)">
-        </video>
-        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop" class="bg-layer" id="bg-media-1" alt="Recovery">
-        <img src="https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=2069&auto=format&fit=crop" class="bg-layer" id="bg-media-2" alt="Wellness">
-    </div>
-
-    <div class="floating-burger" id="burger-btn">&#9776;</div>
-
-    <div class="mobile-menu-overlay" id="mobile-menu">
-        <div class="mobile-group">
-            <div class="mobile-link-head">Performance <span class="mobile-arrow">▼</span></div>
-            <div class="mobile-sub-list">
-                <a href="#" class="mobile-sub-item">Sports Rehab</a>
-                <a href="#" class="mobile-sub-item">Gait Analysis</a>
-                <a href="#" class="mobile-sub-item">Conditioning</a>
-            </div>
-        </div>
-        <div class="mobile-group">
-            <div class="mobile-link-head">Recovery <span class="mobile-arrow">▼</span></div>
-            <div class="mobile-sub-list">
-                <a href="#" class="mobile-sub-item">Manual Therapy</a>
-                <a href="#" class="mobile-sub-item">Soft Tissue</a>
-                <a href="#" class="mobile-sub-item">Cryotherapy</a>
-            </div>
-        </div>
-        <div class="mobile-group">
-            <div class="mobile-link-head">The Clinic <span class="mobile-arrow">▼</span></div>
-            <div class="mobile-sub-list">
-                <a href="#" class="mobile-sub-item">Our Story</a>
-                <a href="#" class="mobile-sub-item">Facilities</a>
-            </div>
-        </div>
-        <div class="mobile-group">
-            <div class="mobile-link-head">Contact <span class="mobile-arrow">▼</span></div>
-            <div class="mobile-sub-list">
-                <a href="#" class="mobile-sub-item">Location</a>
-                <a href="#" class="mobile-sub-item">Direct Booking</a>
-            </div>
-        </div>
-        <a href="#" class="mobile-cta-btn">Book Now</a>
-    </div>
-
-    <header class="site-nav" id="main-header">
-        <div class="nav-container">
-            <div class="logo">Dr. Masooma's</div>
-            
-            <ul class="desktop-menu-links">
-                <li><a class="desktop-link-item" data-target="perf-sub">Performance</a></li>
-                <li><a class="desktop-link-item" data-target="rec-sub">Recovery</a></li>
-                <li><a class="desktop-link-item" data-target="clinic-sub">The Clinic</a></li>
-                <li><a class="desktop-link-item" data-target="cont-sub">Contact</a></li>
-            </ul>
-
-            <a href="#" class="btn btn-dark magnetic btn-desktop-cta">Book Now</a>
+<div class="view-mobile">
+    <section class="mob-gallery-section">
+        <div class="mob-gallery-intro">
+            <span class="green-accent">Precision Modalities</span>
+            <h2>The Clinical<br>Standard.</h2>
         </div>
 
-        <div class="desktop-sub-menu-wrapper">
-            <div class="desktop-sub-group" id="perf-sub">
-                <a href="#" class="sub-link">Sports Rehab</a>
-                <a href="#" class="sub-link">Gait Analysis</a>
-                <a href="#" class="sub-link">Conditioning</a>
-                <a href="#" class="sub-link">Prevention</a>
+        <div class="mob-card-stack">
+            <div class="mob-card">
+                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200&auto=format&fit=crop" alt="Laser">
+                <div class="mob-card-content"><h3>Class IV Laser Therapy</h3></div>
             </div>
-            <div class="desktop-sub-group" id="rec-sub">
-                <a href="#" class="sub-link">Manual Therapy</a>
-                <a href="#" class="sub-link">Soft Tissue</a>
-                <a href="#" class="sub-link">Dry Needling</a>
-                <a href="#" class="sub-link">Cryotherapy</a>
+            <div class="mob-card">
+                <img src="https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=1200&auto=format&fit=crop" alt="Dry Needling">
+                <div class="mob-card-content"><h3>Clinical Dry Needling</h3></div>
             </div>
-            <div class="desktop-sub-group" id="clinic-sub">
-                <a href="#" class="sub-link">Our Story</a>
-                <a href="#" class="sub-link">Meet the Team</a>
-                <a href="#" class="sub-link">Facilities</a>
+            <div class="mob-card">
+                <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?q=80&w=1200&auto=format&fit=crop" alt="Soft Tissue">
+                <div class="mob-card-content"><h3>Soft Tissue Integration</h3></div>
             </div>
-            <div class="desktop-sub-group" id="cont-sub">
-                <a href="#" class="sub-link">Location</a>
-                <a href="#" class="sub-link">Direct Booking</a>
-                <a href="#" class="sub-link">Inquiries</a>
+            <div class="mob-card">
+                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1200&auto=format&fit=crop" alt="Training">
+                <div class="mob-card-content"><h3>Neuromuscular Training</h3></div>
             </div>
-        </div>
-    </header>
-
-    <section class="hero-section">
-        <div class="hero-slides-wrapper">
-            <div class="hero-slide active" id="slide-1">
-                <h1 class="hero-title slide-text">Expert<br>Motion.</h1>
-                <div class="hero-aside slide-aside">
-                    <p class="anim-p">Advanced biomechanics restoring your body to its peak functional state.</p>
-                    <a href="#" class="btn btn-dark magnetic anim-btn">View Treatment <span class="dot"></span></a>
-                </div>
-            </div>
-            <div class="hero-slide" id="slide-2">
-                <h1 class="hero-title slide-text">Precision<br>Recovery.</h1>
-                <div class="hero-aside slide-aside">
-                    <p class="anim-p">Evidence-based protocols designed for elite wellness seekers.</p>
-                    <a href="#" class="btn btn-dark magnetic anim-btn">Our Approach <span class="dot"></span></a>
-                </div>
-            </div>
-            <div class="hero-slide" id="slide-3">
-                <h1 class="hero-title slide-text">Elite<br>Wellness.</h1>
-                <div class="hero-aside slide-aside">
-                    <p class="anim-p">Experience the gold standard in human performance and scientific physiotherapy.</p>
-                    <a href="#" class="btn btn-dark magnetic anim-btn">Meet Dr. Masooma <span class="dot"></span></a>
-                </div>
+            <div class="mob-card">
+                <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1200&auto=format&fit=crop" alt="Recovery">
+                <div class="mob-card-content"><h3>Elite Recovery Systems</h3></div>
             </div>
         </div>
     </section>
+</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://unpkg.com/split-type"></script>
 
-    <script>
-        // --- VARIABLES ---
-        let currentIdx = 0;
-        const slideEls = [document.getElementById('slide-1'), document.getElementById('slide-2'), document.getElementById('slide-3')];
-        const bgEls = [document.getElementById('bg-media-0'), document.getElementById('bg-media-1'), document.getElementById('bg-media-2')];
+<div class="view-desktop">
+    <section class="desk-horizontal-section" id="desk-gallery">
+        <div class="desk-track">
+            <div class="desk-intro">
+                <span class="green-accent">Precision Modalities</span>
+                <h2>The Clinical<br>Standard.</h2>
+            </div>
 
-        // --- ANIMATIONS ---
-        const updateBackground = (newIndex, oldIndex) => {
-            const incoming = bgEls[newIndex];
-            const outgoing = bgEls[oldIndex];
-            gsap.set(incoming, { zIndex: 2, opacity: 0, scale: 1.05 });
-            gsap.set(outgoing, { zIndex: 1 });
-            gsap.to(incoming, { opacity: 1, duration: 1.5, ease: "power2.inOut" });
-            if(outgoing) gsap.to(outgoing, { opacity: 0, duration: 1.5, delay: 0.1 });
-            gsap.fromTo(incoming, { scale: 1.0 }, { scale: 1.1, duration: 7, ease: "none", overwrite: "auto" });
-        };
+            <div class="desk-card">
+                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200&auto=format&fit=crop" alt="Laser">
+                <div class="desk-card-content"><h3>Class IV Laser Therapy</h3></div>
+            </div>
+            <div class="desk-card">
+                <img src="https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=1200&auto=format&fit=crop" alt="Dry Needling">
+                <div class="desk-card-content"><h3>Clinical Dry Needling</h3></div>
+            </div>
+            <div class="desk-card">
+                <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?q=80&w=1200&auto=format&fit=crop" alt="Soft Tissue">
+                <div class="desk-card-content"><h3>Soft Tissue Integration</h3></div>
+            </div>
+            <div class="desk-card">
+                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1200&auto=format&fit=crop" alt="Training">
+                <div class="desk-card-content"><h3>Neuromuscular Training</h3></div>
+            </div>
+            <div class="desk-card">
+                <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1200&auto=format&fit=crop" alt="Recovery">
+                <div class="desk-card-content"><h3>Elite Recovery Systems</h3></div>
+            </div>
+        </div>
+    </section>
+</div>
 
-        const animateHeroText = (idx) => {
-            const s = slideEls[idx];
-            gsap.set(s, { autoAlpha: 1 });
-            if(s.split) s.split.revert();
-            s.split = new SplitType(s.querySelector('.slide-text'), { types: 'chars' });
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- MOBILE ANIMATION (Simple Fade Up) ---
+        if (window.innerWidth < 1024) {
+            gsap.utils.toArray('.mob-card').forEach(card => {
+                gsap.fromTo(card, 
+                    { opacity: 0, y: 50 },
+                    { 
+                        opacity: 1, y: 0, duration: 0.8, ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: card,
+                            start: "top 85%"
+                        }
+                    }
+                );
+            });
+        }
+
+        // --- DESKTOP ANIMATION (Horizontal Scroll) ---
+        if (window.innerWidth >= 1024) {
+            const section = document.querySelector('#desk-gallery');
+            const track = document.querySelector('.desk-track');
             
-            const aside = s.querySelector('.hero-aside p');
-            const btn = s.querySelector('.anim-btn');
-            const tl = gsap.timeline();
-            
-            tl.from(s.split.chars, { opacity: 0, y: 50, filter: "blur(15px)", stagger: 0.03, duration: 1.2, ease: "power4.out" })
-            .fromTo(aside, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, filter: "blur(0px)" }, "-=0.8")
-            .from(btn, { opacity: 0, scale: 0.9, duration: 1 }, "-=0.6");
-        };
-
-        const startHeroSequence = () => {
-            updateBackground(0, null);
-            animateHeroText(0);
-            setInterval(() => {
-                const prev = currentIdx; 
-                currentIdx = (currentIdx + 1) % 3;
-                gsap.to(slideEls[prev], { autoAlpha: 0, duration: 0.5 });
-                updateBackground(currentIdx, prev);
-                animateHeroText(currentIdx);
-            }, 6000);
-        };
-
-        // --- NAVIGATION LOGIC ---
-        const initNav = () => {
-            
-            // 1. MOBILE LOGIC
-            const burger = document.getElementById('burger-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            let isMobileOpen = false;
-
-            burger.addEventListener('click', () => {
-                isMobileOpen = !isMobileOpen;
-                mobileMenu.classList.toggle('active');
-                burger.innerHTML = isMobileOpen ? '&#10005;' : '&#9776;';
+            // 1. Horizontal Pin & Move
+            const horizontalTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top top",
+                    end: () => `+=${track.scrollWidth - window.innerWidth}`, 
+                    scrub: 1,
+                    pin: true,
+                    anticipatePin: 1
+                }
             });
 
-            // Mobile Accordion
-            document.querySelectorAll('.mobile-group').forEach(group => {
-                group.querySelector('.mobile-link-head').addEventListener('click', () => {
-                    group.classList.toggle('open');
-                });
+            horizontalTl.to(track, { 
+                x: () => -(track.scrollWidth - window.innerWidth), 
+                ease: "none" 
             });
 
+            // 2. Parallax Cards
+            const cards = gsap.utils.toArray('.desk-card');
+            
+            cards.forEach((card) => {
+                const img = card.querySelector('img');
 
-            // 2. DESKTOP LOGIC
-            const header = document.getElementById('main-header');
-            const desktopLinks = document.querySelectorAll('.desktop-link-item');
-            let activeSub = null;
-
-            if(window.matchMedia("(min-width: 1024px)").matches) {
-                desktopLinks.forEach(link => {
-                    link.addEventListener('mouseenter', () => {
-                        gsap.to(header, { height: 140, borderRadius: 40, duration: 0.5, ease: "power4.out" });
-
-                        const targetId = link.getAttribute('data-target');
-                        const targetSub = document.getElementById(targetId);
-
-                        if(activeSub && activeSub !== targetSub) {
-                            gsap.set(activeSub, { autoAlpha: 0 });
-                            activeSub.classList.remove('active');
-                        }
-
-                        if(targetSub) {
-                            targetSub.classList.add('active');
-                            gsap.fromTo(targetSub, 
-                                { autoAlpha: 0, y: 15 }, 
-                                { autoAlpha: 1, y: 0, duration: 0.3, delay: 0.1 }
-                            );
-                            activeSub = targetSub;
-                        }
-                    });
-                });
-
-                header.addEventListener('mouseleave', () => {
-                    gsap.to(header, { height: 70, borderRadius: 50, duration: 0.5 });
-                    if(activeSub) {
-                        gsap.to(activeSub, { autoAlpha: 0, duration: 0.2 });
-                        activeSub = null;
+                // Fade In / Blur Out
+                gsap.to(card, {
+                    opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.5,
+                    scrollTrigger: {
+                        trigger: card,
+                        containerAnimation: horizontalTl,
+                        start: "left right-=100",
+                        toggleActions: "play none none reverse"
                     }
                 });
-            }
-        };
 
-        const initMagneticButtons = () => {
-            if(window.matchMedia("(hover: hover)").matches) {
-                document.querySelectorAll('.magnetic').forEach(btn => {
-                    btn.addEventListener('mousemove', (e) => {
-                        const r = btn.getBoundingClientRect();
-                        gsap.to(btn, { x: (e.clientX - r.left - r.width/2) * 0.4, y: (e.clientY - r.top - r.height/2) * 0.4, duration: 0.3 });
-                    });
-                    btn.addEventListener('mouseleave', () => gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1,0.3)" }));
-                });
-            }
-        };
+                // Parallax Image
+                gsap.fromTo(img, 
+                    { x: "-15%" }, 
+                    { 
+                        x: "15%", ease: "none",
+                        scrollTrigger: {
+                            trigger: card,
+                            containerAnimation: horizontalTl,
+                            start: "left right",
+                            end: "right left",
+                            scrub: true
+                        }
+                    }
+                );
 
-        window.addEventListener("load", () => {
-            slideEls.forEach(el => gsap.set(el, { autoAlpha: 0 }));
-            initMagneticButtons();
-            initNav();
-            startHeroSequence();
-        });
-    </script>
-</body>
-</html>
+                // Hover
+                card.addEventListener('mouseenter', () => gsap.to(img, { scale: 1.1, filter: "brightness(1.1)", duration: 0.8 }));
+                card.addEventListener('mouseleave', () => gsap.to(img, { scale: 1, filter: "brightness(0.85)", duration: 0.8 }));
+            });
+        }
+    });
+</script>
