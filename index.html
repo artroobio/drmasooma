@@ -3,23 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kinetic Methodology</title>
+    <title>Dr. Masooma's — Precision Physiotherapy</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
-    <style type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
         /* --- BRAND COLOR TOKENS --- */
         :root {
             --primary-green: #589a31;
             --deep-forest: #2C5E1A;
-            --electric-lime: #a3ff47;
-            --premium-plum: #2D2331;
+            --electric-lime: #a3ff47; 
+            --premium-plum: #2D2331; 
             --vitality-gradient: linear-gradient(135deg, #a3ff47 0%, #589a31 50%, #2C5E1A 100%);
-            --off-white: #F4F7F2;
+            --off-white: #F4F7F2; 
             --glass-border: rgba(88, 154, 49, 0.25);
         }
+
         /* --- SETUP --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--off-white);
@@ -28,10 +32,258 @@
             overflow-x: hidden;
             width: 100%;
         }
-        /* Lenis Smooth Scroll */
-        html.lenis, html.lenis body { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto !important; }
-        /* --- STICKY FOUNDATIONS --- */
+
+        /* Prevent scroll during preloader */
+        body.loading {
+            overflow: hidden;
+        }
+
+        /* --- NEW PRELOADER STYLES (DARK MODE) --- */
+        #preloader-wrap {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #1A2F25; /* Deep Jungle Green */
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        #canvas-container-pre {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+        }
+
+        #subtitle-container {
+            position: absolute;
+            top: 85%; 
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            text-align: center;
+            opacity: 0; 
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #E8F5E9; /* Off-white */
+            margin-bottom: 15px;
+        }
+
+        .highlight-pre {
+            color: #98D8A1; /* Lighter Sage Green */
+            font-weight: 600;
+        }
+
+        .progress-line {
+            width: 0%;
+            height: 2px;
+            background: #98D8A1; 
+            margin: 0 auto;
+        }
+
+        #loader-text-pre {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #98D8A1;
+            font-size: 0.8rem;
+            opacity: 0.5;
+            z-index: 3;
+            transition: opacity 0.5s;
+        }
+
+        /* --- MAIN CONTENT HIDDEN STATE --- */
+        #main-site-content {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        /* --- NAVIGATION --- */
+        header.site-nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 1400px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 50px; 
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(45, 35, 49, 0.1);
+            transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.6s ease;
+            overflow: hidden; 
+            height: 70px; 
+        }
+        header.site-nav.scrolled { top: 10px; border-color: var(--electric-lime); }
+        .nav-container { width: 100%; padding: 0 40px; position: relative; }
+        .nav-main-tier { display: flex; justify-content: space-between; align-items: center; height: 70px; width: 100%; }
+        
+        .logo { 
+            font-size: 1.1rem; 
+            font-weight: 800; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            background: var(--vitality-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block; 
+        }
+
+        .nav-links { display: flex; gap: 40px; list-style: none; align-items: center; }
+        .nav-links a { 
+            text-decoration: none; 
+            color: var(--premium-plum); 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            transition: 0.3s; 
+            opacity: 0.6; 
+            padding: 25px 0; 
+            display: block; 
+        }
+        .nav-links li:hover > a { opacity: 1; color: var(--primary-green); }
+
+        .nav-sub-tier-wrapper { position: relative; width: 100%; height: 70px; pointer-events: none; }
+        .nav-sub-tier { 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            display: none; 
+            justify-content: center; 
+            align-items: center; 
+            border-top: 1px solid rgba(136, 201, 71, 0.1); 
+            opacity: 0; 
+            visibility: hidden;
+            background: transparent;
+        }
+        .nav-sub-tier.active { display: flex; visibility: visible; pointer-events: all; }
+        .sub-menu-list { display: flex; gap: 40px; list-style: none; }
+        .sub-menu-item a { color: var(--premium-plum) !important; font-size: 0.65rem; font-weight: 700; opacity: 0.5; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; }
+        .sub-menu-item:hover a { opacity: 1; color: var(--primary-green) !important; }
+
+        /* --- HERO --- */
+        .hero-section { position: relative; height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #000; z-index: 1; }
+        #liquid-canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.85; }
+        .hero-section::after { 
+            content: ''; 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(180deg, rgba(45,35,49,0.4) 0%, transparent 50%, rgba(45,35,49,0.3) 100%); 
+            z-index: 2; pointer-events: none; 
+        }
+        .hero-slides-wrapper { position: relative; z-index: 10; max-width: 1600px; width: 100%; height: 100%; padding: 0 60px; }
+        .hero-slide { position: absolute; top: 0; left: 60px; right: 60px; height: 100%; display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10vh; opacity: 0; visibility: hidden; pointer-events: none; }
+        .hero-slide.active { opacity: 1; visibility: visible; pointer-events: all; }
+        
+        .hero-title { 
+            font-size: clamp(3rem, 10vw, 8.5rem); 
+            font-weight: 400; 
+            line-height: 0.85; 
+            letter-spacing: -0.04em; 
+            color: #fff;
+            text-shadow: 0 10px 40px rgba(0,0,0,0.4); 
+        }
+        .hero-aside { max-width: 400px; text-align: right; }
+        .hero-aside p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; font-weight: 300; color: #fff; opacity: 0; }
+
+        /* --- WHO WE HELP (STACKING) --- */
+        .stack-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--off-white);
+            z-index: 5;
+            overflow: hidden;
+        }
+        .stack-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stack-header {
+            position: absolute;
+            top: 10vh;
+            left: 80px;
+            z-index: 10;
+        }
+        .stack-cards-wrapper {
+            position: relative;
+            width: 80vw;
+            max-width: 1200px;
+            height: 65vh;
+            perspective: 1200px;
+        }
+        .stack-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 40px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 30px 80px rgba(45, 35, 49, 0.1);
+            display: flex;
+            overflow: hidden;
+            transform: translateY(100%); 
+            will-change: transform, opacity;
+        }
+        .stack-card-img { width: 45%; height: 100%; overflow: hidden; }
+        .stack-card-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8) contrast(1.1); }
+        .stack-card-content { width: 55%; padding: 80px; display: flex; flex-direction: column; justify-content: center; }
+        .stack-card h4 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; letter-spacing: -2px; color: var(--premium-plum); margin-bottom: 20px; }
+        .stack-problem { font-size: 0.85rem; color: var(--primary-green); text-transform: uppercase; letter-spacing: 4px; font-weight: 800; display: block; margin-bottom: 30px; }
+        .stack-outcome { font-size: 1.4rem; line-height: 1.4; color: #555; font-weight: 300; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 30px; }
+
+        /* --- HORIZONTAL GALLERY --- */
+        .horizontal-section { position: relative; width: 100%; height: 100vh; overflow: hidden; background-color: var(--premium-plum); z-index: 10; }
+        .horizontal-track { display: flex; height: 100%; width: fit-content; align-items: center; padding: 0 10vw; }
+        .horizontal-intro { min-width: 40vw; padding-right: 5vw; }
+        .horizontal-intro h2 { font-size: 4.5rem; font-weight: 400; letter-spacing: -3px; line-height: 1; color: #fff; }
+        .horizontal-intro .green-accent { color: var(--electric-lime); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 4px; font-weight: 800; display: block; margin-bottom: 20px; }
+        .horizontal-card { min-width: 500px; height: 60vh; margin-right: 80px; position: relative; border-radius: 40px; overflow: hidden; border: 1px solid rgba(163, 255, 71, 0.3); transform: scale(0.9); opacity: 0; filter: blur(20px); }
+        .horizontal-card img { width: 120%; height: 100%; object-fit: cover; filter: brightness(0.85); position: absolute; left: -10%; top: 0; }
+        .card-content { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px; background: linear-gradient(0deg, var(--premium-plum) 0%, transparent 100%); color: white; }
+
+        /* --- IMPACT METRICS --- */
+        .metrics-section { padding: 150px 80px; background-color: var(--off-white); position: relative; z-index: 5; }
+        .metrics-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+        .metric-card { padding: 50px; border-left: 3px solid var(--electric-lime); background: #fff; border-radius: 0 30px 30px 0; transform: translateY(40px); opacity: 0; }
+        .metric-value { font-family: monospace; font-size: 5.5rem; font-weight: 800; color: var(--premium-plum); letter-spacing: -5px; }
+
+        /* --- PROFILE --- */
+        .profile-section { padding: 150px 80px; background-color: #fff; position: relative; z-index: 10; }
+        .profile-container { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; gap: 100px; }
+        .profile-text-side { width: 50%; }
+        .profile-heading { font-size: 4rem; line-height: 1; margin-bottom: 40px; letter-spacing: -3px; color: var(--premium-plum); }
+        .profile-image-wrapper { width: 50%; height: 80vh; border-radius: 40px; overflow: hidden; box-shadow: 0 40px 100px rgba(45, 35, 49, 0.2); }
+        .profile-image-wrapper img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
+
+        /* --- JOURNEY --- */
+        .journey-section { padding: 150px 80px; background: var(--off-white); position: relative; z-index: 10; border-top: 1px solid rgba(0,0,0,0.05); }
+        .journey-header { text-align: center; margin-bottom: 120px; }
+        .journey-container { max-width: 1400px; margin: 0 auto; position: relative; display: flex; flex-direction: column; gap: 140px; }
+        .journey-path-svg { position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 4px; height: 100%; overflow: visible; z-index: 1; }
+        .journey-step { display: flex; justify-content: space-between; align-items: center; width: 100%; position: relative; z-index: 2; }
+        .journey-step:nth-child(even) { flex-direction: row-reverse; }
+        .step-content { width: 44%; padding: 60px; background: #fff; border-radius: 40px; border: 1px solid var(--glass-border); opacity: 0; transform: translateY(50px); position: relative; z-index: 5; box-shadow: 0 30px 60px rgba(0,0,0,0.03); }
+        .step-indicator { width: 68px; height: 68px; background: #fff; border: 3px solid var(--electric-lime); border-radius: 50%; position: absolute; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; align-items: center; justify-content: center; }
+        .step-dot { width: 20px; height: 20px; background: var(--vitality-gradient); border-radius: 50%; opacity: 0; transform: scale(0); }
+
+        /* --- STICKY --- */
         .sticky-scroll-container { display: flex; width: 100%; background-color: var(--premium-plum); position: relative; z-index: 15; }
         .sticky-left { width: 45%; height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 80px; background: var(--premium-plum); }
         .sticky-left h2 { color: #fff; font-size: 4.5rem; letter-spacing: -3px; line-height: 0.9; }
@@ -40,83 +292,575 @@
         .scroll-item { margin-bottom: 300px; width: 100%; opacity: 0.1; transform: scale(0.9); filter: grayscale(1) blur(20px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .scroll-item.is-active { opacity: 1; transform: scale(1); filter: grayscale(0) blur(0px); }
         .scroll-image-wrap { width: 100%; aspect-ratio: 4 / 5; border-radius: 40px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
-        .scroll-image-wrap img { width: 100%; height: 100%; object-fit: cover; loading: lazy; }
+        .scroll-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
         .scroll-caption { font-size: 1.4rem; font-weight: 700; color: #fff; margin-top: 30px; display: flex; align-items: center; gap: 20px; }
+
+        /* --- PORTFOLIO --- */
+        .portfolio-section { max-width: 100%; padding: 150px 80px; background: #fff; position: relative; z-index: 20; display: block; border-top: 1px solid rgba(0,0,0,0.05); }
+        .portfolio-container-inner { max-width: 1400px; margin: 0 auto; }
+        .portfolio-header { margin-bottom: 100px; }
+        .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 100px 50px; width: 100%; }
+        .project-card { text-decoration: none; color: inherit; display: block; opacity: 0; transform: translateY(60px); }
+        .image-wrapper { width: 100%; aspect-ratio: 16 / 10; border-radius: 40px; overflow: hidden; box-shadow: 0 40px 80px rgba(45, 35, 49, 0.1); border: 1px solid var(--glass-border); margin-bottom: 35px; }
+        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 1s ease; }
+        .project-card:hover .image-wrapper img { transform: scale(1.05); }
+
+        /* --- REVEAL --- */
+        .reveal-section { position: relative; width: 100%; height: 100vh; overflow: hidden; background: #000; z-index: 25; }
+        .reveal-clinic-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+        .tooth { position: absolute; left: 0; width: 100%; height: 50.5%; background-color: var(--premium-plum); z-index: 2; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .tooth-top { top: 0; align-items: flex-end; }
+        .tooth-bottom { bottom: 0; align-items: flex-start; }
+        .reveal-text-fixed { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; text-align: center; pointer-events: none; width: 100%; }
+        .reveal-text-fixed h2 { font-size: clamp(3rem, 8vw, 8rem); color: #fff; text-transform: uppercase; font-weight: 800; letter-spacing: 15px; text-shadow: 0 10px 50px rgba(0,0,0,0.5); }
+
+        /* --- TESTIMONIALS --- */
+        .testimonial-section { position: relative; height: 100vh; width: 100%; overflow: hidden; background-color: var(--premium-plum); display: flex; align-items: center; justify-content: center; z-index: 30; }
+        .testimonial-bg { position: absolute; top: 0; left: 0; width: 100%; height: 130%; background-image: linear-gradient(rgba(45,35,49,0.9), rgba(45,35,49,0.9)), url('https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=2000&auto=format&fit=crop'); background-size: cover; z-index: 1; }
+        .testimonial-content { position: relative; z-index: 2; max-width: 1200px; padding: 80px; text-align: center; }
+        .testimonial-quote { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 5rem); color: #fff; font-style: italic; letter-spacing: -1px; opacity: 0; filter: blur(20px); transform: scale(0.95); }
+        .testimonial-author { color: var(--electric-lime); font-size: 1rem; text-transform: uppercase; letter-spacing: 8px; font-weight: 900; display: block; margin-top: 40px; opacity: 0; transform: translateY(20px); }
+
+        /* --- BUTTONS --- */
+        .btn { text-decoration: none; padding: 20px 45px; border-radius: 60px; font-size: 0.85rem; font-weight: 800; display: inline-flex; align-items: center; gap: 15px; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid transparent; letter-spacing: 2px; text-transform: uppercase; }
+        .btn-dark { background: var(--vitality-gradient); color: #fff; box-shadow: 0 15px 35px rgba(88, 154, 49, 0.4); }
+        .dot { width: 12px; height: 12px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px #fff; }
+
         @media (max-width: 768px) {
-            .sticky-scroll-container { flex-direction: column; }
-            .sticky-left { width: 100%; height: auto; position: relative; padding: 80px 20px; text-align: center; }
-            .scrolling-right { width: 100%; padding: 0 20px 80px; }
-            .scroll-item { margin-bottom: 80px; opacity: 1; transform: scale(1); filter: none; }
-            .scroll-item.is-active { opacity: 1; transform: scale(1); filter: none; }
-            .scroll-image-wrap { aspect-ratio: 16 / 9; }
-            .sticky-left h2 { font-size: 2.5rem; }
-            .scroll-caption { font-size: 1.2rem; justify-content: center; }
+            header.site-nav { padding: 0 20px; top: 10px; height: 60px; width: calc(100% - 20px); }
+            .nav-links { display: none; }
+            .stack-cards-wrapper { width: 90vw; height: 70vh; }
+            .stack-card { flex-direction: column; }
+            .stack-card-img, .stack-card-content { width: 100%; height: 50%; }
+            .stack-card-content { padding: 30px; }
+            .stack-card h4 { font-size: 1.8rem; }
         }
     </style>
 </head>
-<body>
-    <!-- KINETIC METHODOLOGY (STRETCHED/FIXED) -->
-    <section class="sticky-scroll-container">
-        <div class="sticky-left">
-            <span class="sticky-pre foundations-anim">Core Foundations</span>
-            <h2 class="sticky-heading animate-foundations-title">The Kinetic<br>Methodology.</h2>
+<body class="loading">
+
+    <!-- PRELOADER -->
+    <div id="preloader-wrap">
+        <div id="loader-text-pre">Loading Experience...</div>
+        <div id="canvas-container-pre"></div>
+        <div id="subtitle-container">
+            <div class="subtitle">
+                Healing with <span class="highlight-pre">Precision</span> and <span class="highlight-pre">Care</span>
+            </div>
+            <div class="progress-line"></div>
         </div>
-        <div class="scrolling-right" id="sticky-scroll-track">
-            <div class="scroll-item" id="found-1"><div class="scroll-image-wrap"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/83737-32qJ7hupb10nXmF7.jpg" alt="Technical Diagnostics setup"></div><div class="scroll-caption"><span>01. Technical Diagnostics</span></div></div>
-            <div class="scroll-item" id="found-2"><div class="scroll-image-wrap"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/2149115584-AaVMKSPVBaHOOIEu.jpg" alt="Dynamic Biomechanics analysis"></div><div class="scroll-caption"><span>02. Dynamic Biomechanics</span></div></div>
-            <div class="scroll-item" id="found-3"><div class="scroll-image-wrap"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/pexels-yankrukov-5794055-1-ZGwEN98wFECZVxvv.jpg" alt="Neural Pathway Mapping"></div><div class="scroll-caption"><span>03. Neural Pathway Mapping</span></div></div>
-            <div class="scroll-item" id="found-4"><div class="scroll-image-wrap"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/pexels-kampus-6111604-UVfr2Pni6VaGh6to.jpg" alt="Structural Integrity assessment"></div><div class="scroll-caption"><span>04. Structural Integrity</span></div></div>
-            <div class="scroll-item" id="found-5"><div class="scroll-image-wrap"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/acupuncture-6324472_1280-sjidkaRJ8V7ZdF4j.jpg" alt="Systemic Alignment therapy"></div><div class="scroll-caption"><span>05. Systemic Alignment</span></div></div>
-            <div class="scroll-item" id="found-6"><div class="scroll-image-wrap"><img src="https://assets.zyrosite.com/A3QlOV94WLSaL6xE/massage-3710210_1280-GBbClorOfhcP7EwL.jpg" alt="Manual Restoration"></div><div class="scroll-caption"><span>06. Manual Restoration</span></div></div>
-        </div>
-    </section>
+    </div>
+
+    <!-- MAIN SITE CONTENT -->
+    <div id="main-site-content">
+        <header class="site-nav" id="main-header">
+            <div class="nav-container">
+                <div class="nav-main-tier">
+                    <div class="logo">Dr. Masooma's</div>
+                    <ul class="nav-links">
+                        <li class="menu-trigger" data-target="performance-menu"><a href="#" class="nav-item">Performance</a></li>
+                        <li class="menu-trigger" data-target="recovery-menu"><a href="#" class="nav-item">Recovery</a></li>
+                        <li class="menu-trigger" data-target="clinic-menu"><a href="#" class="nav-item">The Clinic</a></li>
+                        <li class="menu-trigger" data-target="contact-menu"><a href="#" class="nav-item">Contact</a></li>
+                    </ul>
+                    <a href="#" class="btn btn-dark magnetic nav-item" style="padding: 10px 20px; font-size: 0.7rem;">Book Now</a>
+                </div>
+
+                <div class="nav-sub-tier-wrapper">
+                    <div class="nav-sub-tier" id="performance-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="#">Sports Rehab</a></li><li class="sub-menu-item"><a href="#">Gait Analysis</a></li><li class="sub-menu-item"><a href="#">Conditioning</a></li><li class="sub-menu-item"><a href="#">Prevention</a></li><li class="sub-menu-item"><a href="#">Biomechanics</a></li></ul></div>
+                    <div class="nav-sub-tier" id="recovery-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="#">Manual Therapy</a></li><li class="sub-menu-item"><a href="#">Soft Tissue</a></li><li class="sub-menu-item"><a href="#">Dry Needling</a></li><li class="sub-menu-item"><a href="#">Cryotherapy</a></li></ul></div>
+                    <div class="nav-sub-tier" id="clinic-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="#">Our Story</a></li><li class="sub-menu-item"><a href="#">Meet the Team</a></li><li class="sub-menu-item"><a href="#">Facilities</a></li><li class="sub-menu-item"><a href="#">Philosophy</a></li></ul></div>
+                    <div class="nav-sub-tier" id="contact-menu"><ul class="sub-menu-list"><li class="sub-menu-item"><a href="#">Location</a></li><li class="sub-menu-item"><a href="#">Direct Booking</a></li><li class="sub-menu-item"><a href="#">Insurance</a></li><li class="sub-menu-item"><a href="#">Inquiries</a></li></ul></div>
+                </div>
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <div id="liquid-canvas-container"></div>
+            <div class="hero-slides-wrapper">
+                <div class="hero-slide active" id="slide-1">
+                    <h1 class="hero-title slide-text">Expert<br>Motion.</h1>
+                    <div class="hero-aside slide-aside">
+                        <p class="anim-p">Advanced biomechanics restoring your body to its peak functional state.</p>
+                        <a href="#" class="btn btn-dark magnetic anim-btn">View Treatment <span class="dot"></span></a>
+                    </div>
+                </div>
+                <div class="hero-slide" id="slide-2">
+                    <h1 class="hero-title slide-text">Precision<br>Recovery.</h1>
+                    <div class="hero-aside slide-aside">
+                        <p class="anim-p">Evidence-based protocols designed for elite wellness seekers. Tailored science for your recovery.</p>
+                        <a href="#" class="btn btn-dark magnetic anim-btn">Our Approach <span class="dot"></span></a>
+                    </div>
+                </div>
+                <div class="hero-slide" id="slide-3">
+                    <h1 class="hero-title slide-text">Elite<br>Wellness.</h1>
+                    <div class="hero-aside slide-aside">
+                        <p class="anim-p">Experience the gold standard in human performance and scientific physiotherapy.</p>
+                        <a href="#" class="btn btn-dark magnetic anim-btn">Meet Dr. Masooma <span class="dot"></span></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHO WE HELP -->
+        <section class="stack-section" id="stack-trigger">
+            <div class="stack-header">
+                <span class="sticky-pre foundations-anim">Target Focus</span>
+                <h2 class="animate-help-title" style="color: var(--premium-plum); font-size: 4rem; letter-spacing: -2px;">Who We Help.</h2>
+            </div>
+            <div class="stack-container">
+                <div class="stack-cards-wrapper">
+                    <div class="stack-card">
+                        <div class="stack-card-img"><img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1200"></div>
+                        <div class="stack-card-content">
+                            <span class="stack-problem">High-impact strain</span>
+                            <h4 class="stack-title">Athletes</h4>
+                            <p class="stack-outcome">Return to peak competition levels with data-driven conditioning and elite kinetic analysis.</p>
+                        </div>
+                    </div>
+                    <div class="stack-card">
+                        <div class="stack-card-img"><img src="https://images.unsplash.com/photo-1542744094-3a31f1000a1a?q=80&w=1200"></div>
+                        <div class="stack-card-content">
+                            <span class="stack-problem">Postural fatigue</span>
+                            <h4 class="stack-title">Professionals</h4>
+                            <p class="stack-outcome">Eliminate chronic neck and back pain through ergonomic recalibration and postural manual resets.</p>
+                        </div>
+                    </div>
+                    <div class="stack-card">
+                        <div class="stack-card-img"><img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1200"></div>
+                        <div class="stack-card-content">
+                            <span class="stack-problem">Loss of mobility</span>
+                            <h4 class="stack-title">Rehab Cases</h4>
+                            <p class="stack-outcome">Accelerated clinical recovery post-operation via targeted tissue modulation and guided loading.</p>
+                        </div>
+                    </div>
+                    <div class="stack-card">
+                        <div class="stack-card-img"><img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200"></div>
+                        <div class="stack-card-content">
+                            <span class="stack-problem">Persistent discomfort</span>
+                            <h4 class="stack-title">Chronic Pain</h4>
+                            <p class="stack-outcome">Break the pain cycle through advanced neural mapping and sustainable kinetic realignment.</p>
+                        </div>
+                    </div>
+                    <div class="stack-card">
+                        <div class="stack-card-img"><img src="https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=1200"></div>
+                        <div class="stack-card-content">
+                            <span class="stack-problem">Knee & Joint Injuries</span>
+                            <h4 class="stack-title">Injuries</h4>
+                            <p class="stack-outcome">Knee ligament and acute joint tears: Return to running without pain using focused biometric recovery.</p>
+                        </div>
+                    </div>
+                    <div class="stack-card">
+                        <div class="stack-card-img"><img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?q=80&w=1200"></div>
+                        <div class="stack-card-content">
+                            <span class="stack-problem">Degenerative stiffness</span>
+                            <h4 class="stack-title">Mobility</h4>
+                            <p class="stack-outcome">Regain fluid joint movement and independent functional strength for life-long vitality.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HORIZONTAL GALLERY -->
+        <section class="horizontal-section" id="horizontal-gallery">
+            <div class="horizontal-track">
+                <div class="horizontal-intro">
+                    <span class="green-accent gallery-anim">Precision Modalities</span>
+                    <h2 class="animate-title">The Clinical<br>Standard.</h2>
+                </div>
+                <div class="horizontal-card"><img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200&auto=format&fit=crop"><div class="card-content"><h3 class="animate-title-v">Class IV Laser Therapy</h3></div></div>
+                <div class="horizontal-card"><img src="https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=1200&auto=format&fit=crop"><div class="card-content"><h3 class="animate-title-v">Clinical Dry Needling</h3></div></div>
+                <div class="horizontal-card"><img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?q=80&w=1200&auto=format&fit=crop"><div class="card-content"><h3 class="animate-title-v">Soft Tissue Integration</h3></div></div>
+                <div class="horizontal-card"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1200&auto=format&fit=crop"><div class="card-content"><h3 class="animate-title-v">Neuromuscular Training</h3></div></div>
+                <div class="horizontal-card"><img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1200&auto=format&fit=crop"><div class="card-content"><h3 class="animate-title-v">Elite Recovery Systems</h3></div></div>
+            </div>
+        </section>
+
+        <!-- IMPACT METRICS -->
+        <section class="metrics-section">
+            <div class="metrics-container">
+                <div class="metric-card">
+                    <span class="metric-label animate-hud">Volume</span>
+                    <div class="metric-value"><span class="counter" data-target="5000">0</span><span class="metric-suffix">+</span></div>
+                    <span class="metric-label animate-hud">Recoveries Completed</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label animate-hud">Innovation</span>
+                    <div class="metric-value"><span class="counter" data-target="12">0</span><span class="metric-suffix">+</span></div>
+                    <span class="metric-label animate-hud">Performance Devices</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label animate-hud">Efficacy</span>
+                    <div class="metric-value"><span class="counter" data-target="98">0</span><span class="metric-suffix">%</span></div>
+                    <span class="metric-label animate-hud">Patient Mobility Success</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROFILE -->
+        <section class="profile-section" id="profile-trigger">
+            <div class="profile-container">
+                <div class="profile-text-side">
+                    <span class="sticky-pre profile-anim">The Visionary</span>
+                    <h2 class="profile-heading animate-profile-title">The Science behind<br>the Practice.</h2>
+                    <p class="profile-bio animate-profile-bio">Dr. Masooma combines clinical rigor with a deep understanding of kinetic potential. Her philosophy treats the body as a high-performance machine requiring expert modulation for sustainable performance.</p>
+                    <div class="profile-signature profile-anim">Dr. Masooma, PT</div>
+                </div>
+                <div class="profile-image-wrapper"><img id="profile-img" src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=1974&auto=format&fit=crop"></div>
+            </div>
+        </section>
+
+        <!-- PATIENT JOURNEY -->
+        <section class="journey-section">
+            <div class="journey-header">
+                <span class="sticky-pre animate-journey-h">The Methodology</span>
+                <h2 class="sticky-heading animate-journey-title">The Patient Journey.</h2>
+            </div>
+            <div class="journey-container" id="journey-trigger">
+                <svg class="journey-path-svg" preserveAspectRatio="none">
+                    <line x1="50%" y1="0" x2="50%" y2="100%" stroke="rgba(45, 35, 49, 0.1)" stroke-width="2" />
+                    <path id="journey-progress-path" d="" stroke="var(--electric-lime)" stroke-width="4" fill="none" stroke-linecap="round" />
+                </svg>
+                <div class="journey-step"><div class="step-content"><span class="step-number">Phase 01</span><h3 class="step-title">Biometric Audit</h3><p class="step-desc">Advanced diagnostic tools mapping structural imbalances and identifying kinetic chains that require immediate modulation.</p></div><div class="step-indicator"><div class="step-dot"></div></div><div style="width: 44%;"></div></div>
+                <div class="journey-step"><div class="step-content"><span class="step-number">Phase 02</span><h3 class="step-title">Neural Modulation</h3><p class="step-desc">Targeted manual resets aimed at inflammation reduction and restoring neural signal clarity for optimal motor control.</p></div><div class="step-indicator"><div class="step-dot"></div></div><div style="width: 44%;"></div></div>
+                <div class="journey-step"><div class="step-content"><span class="step-number">Phase 03</span><h3 class="step-title">Kinetic Training</h3><p class="step-desc">Corrective loading protocols and foundational movement patterns designed to build structural joint stability and resilience.</p></div><div class="step-indicator"><div class="step-dot"></div></div><div style="width: 44%;"></div></div>
+                <div class="journey-step"><div class="step-content"><span class="step-number">Phase 04</span><h3 class="step-title">Optimization</h3><p class="step-desc">Sustainable human performance transition—integrating refined mechanics into your daily lifestyle or elite athletic discipline.</p></div><div class="step-indicator"><div class="step-dot"></div></div><div style="width: 44%;"></div></div>
+            </div>
+        </section>
+
+        <!-- KINETIC METHODOLOGY -->
+        <section class="sticky-scroll-container">
+            <div class="sticky-left">
+                <span class="sticky-pre foundations-anim">Core Foundations</span>
+                <h2 class="sticky-heading animate-foundations-title">The Kinetic<br>Methodology.</h2>
+            </div>
+            <div class="scrolling-right" id="sticky-scroll-track">
+                <div class="scroll-item" id="found-1"><div class="scroll-image-wrap"><img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop"></div><div class="scroll-caption"><span>01. Technical Diagnostics</span></div></div>
+                <div class="scroll-item" id="found-2"><div class="scroll-image-wrap"><img src="https://images.unsplash.com/photo-1594411643099-24707bb3205a?q=80&w=2070&auto=format&fit=crop"></div><div class="scroll-caption"><span>02. Dynamic Biomechanics</span></div></div>
+                <div class="scroll-item" id="found-3"><div class="scroll-image-wrap"><img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?q=80&w=2070&auto=format&fit=crop"></div><div class="scroll-caption"><span>03. Neural Pathway Mapping</span></div></div>
+                <div class="scroll-item" id="found-4"><div class="scroll-image-wrap"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop"></div><div class="scroll-caption"><span>04. Structural Integrity</span></div></div>
+                <div class="scroll-item" id="found-5"><div class="scroll-image-wrap"><img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070&auto=format&fit=crop"></div><div class="scroll-caption"><span>05. Systemic Alignment</span></div></div>
+            </div>
+        </section>
+
+        <!-- OUR EXPERTISE -->
+        <section class="portfolio-section">
+            <div class="portfolio-container-inner">
+                <div class="portfolio-header">
+                    <span class="sticky-pre animate-portfolio-h">Our Expertise</span>
+                    <h2 class="sticky-heading animate-portfolio-title">Clinical Specializations.</h2>
+                </div>
+                <div class="project-grid">
+                    <a href="#" class="project-card"><div class="image-wrapper"><img src="https://images.unsplash.com/photo-1594411643099-24707bb3205a?q=80&w=2070&auto=format&fit=crop"></div><span class="tags spec-tags">Performance</span><h2 class="project-title spec-title">Elite Recovery</h2></a>
+                    <a href="#" class="project-card"><div class="image-wrapper"><img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?q=80&w=1974&auto=format&fit=crop"></div><span class="tags spec-tags">Manual</span><h2 class="project-title spec-title">Deep Integration</h2></a>
+                    <a href="#" class="project-card"><div class="image-wrapper"><img src="https://images.unsplash.com/photo-1579126038827-ec5607b3b7c9?q=80&w=2070&auto=format&fit=crop"></div><span class="tags spec-tags">Neural</span><h2 class="project-title spec-title">Motor Training</h2></a>
+                    <a href="#" class="project-card"><div class="image-wrapper"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop"></div><span class="tags spec-tags">Foundation</span><h2 class="project-title spec-title">Structural Alignment</h2></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- TEETH REVEAL -->
+        <section class="reveal-section" id="teeth-trigger">
+            <img class="reveal-clinic-img" src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2070&auto=format&fit=crop" alt="Clinic Interior">
+            <div class="tooth tooth-top" id="tooth-t"></div>
+            <div class="reveal-text-fixed">
+                <h2 id="teeth-text">Dr. Masooma's</h2>
+            </div>
+            <div class="tooth tooth-bottom" id="tooth-b"></div>
+        </section>
+
+        <!-- TESTIMONIALS -->
+        <section class="testimonial-section">
+            <div class="testimonial-bg" id="parallax-bg"></div>
+            <div class="testimonial-content">
+                <h2 class="testimonial-quote" id="testimonial-text">"The methodology applied here transcends traditional therapy. It is the convergence of data and kinetic artistry."</h2>
+                <span class="testimonial-author" id="testimonial-author">Elite Performance Institute</span>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FontLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/TextGeometry.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/split-type"></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+
     <script>
-        window.addEventListener("load", () => {
-            gsap.registerPlugin(ScrollTrigger);
+        // --- PRELOADER LOGIC (ADVANCED 2.5D DARK MODE) ---
+        const initPreloader = () => {
+            const scenePre = new THREE.Scene();
+            scenePre.background = new THREE.Color('#1A2F25'); // Deep Jungle Green
+            scenePre.fog = new THREE.Fog('#1A2F25', 15, 50);
 
-            const lenis = new Lenis({ duration: 1.2, smooth: true });
-            ScrollTrigger.scrollerProxy(document.body, { scrollTop(value) { return arguments.length ? lenis.scrollTo(value) : lenis.scroll; } });
-            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); } requestAnimationFrame(raf);
-            window.addEventListener('resize', () => ScrollTrigger.refresh());
+            const cameraPre = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+            cameraPre.position.set(0, 0, 22);
 
-            // --- STICKY METHODOLOGY ---
-            const scrollItems = document.querySelectorAll('.scroll-item');
-            scrollItems.forEach((item) => {
-                const s = new SplitType(item.querySelector('.scroll-caption'), { types: 'chars' });
-                gsap.set(s.chars, { opacity: 0.2 });
-                ScrollTrigger.create({
-                    trigger: item, start: "top center", end: "bottom center",
-                    onToggle: self => {
-                        item.classList.toggle('is-active', self.isActive);
-                        gsap.to(s.chars, { opacity: self.isActive ? 1 : 0.2, color: self.isActive ? "#a3ff47" : "#fff", duration: 0.5 });
-                    }
-                });
+            const rendererPre = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            rendererPre.setSize(window.innerWidth, window.innerHeight);
+            rendererPre.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            rendererPre.shadowMap.enabled = true;
+            rendererPre.localClippingEnabled = true;
+            document.getElementById('canvas-container-pre').appendChild(rendererPre.domElement);
+
+            // Lighting
+            const ambientLightPre = new THREE.AmbientLight(0xffffff, 0.4);
+            scenePre.add(ambientLightPre);
+
+            const dirLightPre = new THREE.DirectionalLight(0xffffff, 0.3);
+            dirLightPre.position.set(10, 15, 10);
+            dirLightPre.castShadow = true;
+            dirLightPre.shadow.mapSize.width = 2048; 
+            dirLightPre.shadow.mapSize.height = 2048;
+            scenePre.add(dirLightPre);
+
+            const greenLightPre = new THREE.PointLight(0x98D8A1, 2.5, 30);
+            greenLightPre.position.set(0, -5, 5);
+            scenePre.add(greenLightPre);
+
+            // Mouse & Parallax Variables
+            const cursor = { x: 0, y: 0 };
+            const textGroupPre = new THREE.Group();
+            scenePre.add(textGroupPre);
+
+            window.addEventListener('mousemove', (e) => {
+                cursor.x = (e.clientX / window.innerWidth) - 0.5;
+                cursor.y = (e.clientY / window.innerHeight) - 0.5;
             });
 
-            ScrollTrigger.matchMedia({
-                // Desktop
-                "(min-width: 769px)": function() {
-                    ScrollTrigger.create({
-                        trigger: ".sticky-scroll-container",
-                        start: "top top",
-                        end: "bottom bottom",
-                        pin: ".sticky-left",
-                        pinSpacing: true,
-                        invalidateOnRefresh: true
-                    });
-                },
-                // Mobile (no pin, normal scroll)
-                "(max-width: 768px)": function() {
-                    // No pinning, just normal scroll with is-active toggles
+            const fontLoader = new THREE.FontLoader();
+            fontLoader.load('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+                document.getElementById('loader-text-pre').style.opacity = 0;
+
+                const textString = "Dr. Masooma's\nAdvanced Physiorehab";
+                const geometryPre = new THREE.TextGeometry(textString, {
+                    font: font, size: 1.8, height: 0.3, curveSegments: 12,
+                    bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.02,
+                    bevelOffset: 0, bevelSegments: 5
+                });
+                geometryPre.center();
+
+                const revealPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), -20); 
+
+                const materialPre = new THREE.MeshStandardMaterial({
+                    color: 0x98D8A1, roughness: 1.0, metalness: 0.0,
+                    clippingPlanes: [ revealPlane ], clipShadows: true
+                });
+
+                const textMeshPre = new THREE.Mesh(geometryPre, materialPre);
+                textMeshPre.castShadow = true;
+                textMeshPre.receiveShadow = true;
+                textGroupPre.add(textMeshPre);
+
+                const tlPre = gsap.timeline();
+
+                // A. Camera Pull-Back
+                gsap.from(cameraPre.position, {
+                    z: 18, duration: 6, ease: "power2.out"
+                });
+
+                // B. Wipe Reveal
+                tlPre.to(revealPlane, {
+                    constant: 20, duration: 5, ease: "power1.inOut"
+                });
+
+                // C. Subtitle Fade In
+                tlPre.to("#subtitle-container", {
+                    opacity: 1, duration: 2
+                }, "-=2.5"); 
+
+                // D. Progress Line
+                tlPre.to(".progress-line", {
+                    width: "80px", duration: 1.5, ease: "expo.out"
+                }, "-=1.5");
+
+                // E. Transition to Main Site
+                tlPre.to("#preloader-wrap", {
+                    opacity: 0, duration: 1.2, ease: "power4.inOut",
+                    onComplete: () => {
+                        document.getElementById('preloader-wrap').style.display = 'none';
+                        document.body.classList.remove('loading');
+                        document.getElementById('main-site-content').style.opacity = 1;
+                        startMainSite();
+                    }
+                }, "+=0.5");
+            });
+
+            const clockPre = new THREE.Clock();
+            const animatePre = () => {
+                requestAnimationFrame(animatePre);
+                const time = clockPre.getElapsedTime();
+
+                // Parallax Rotation
+                const targetRotX = -0.05 + (cursor.y * 0.1);
+                const targetRotY = cursor.x * 0.15;
+                textGroupPre.rotation.x += (targetRotX - textGroupPre.rotation.x) * 0.05;
+                textGroupPre.rotation.y += (targetRotY - textGroupPre.rotation.y) * 0.05;
+
+                // Floating
+                textGroupPre.position.y = Math.sin(time * 0.8) * 0.1;
+
+                rendererPre.render(scenePre, cameraPre);
+            }
+            animatePre();
+
+            window.addEventListener('resize', () => {
+                cameraPre.aspect = window.innerWidth / window.innerHeight;
+                cameraPre.updateProjectionMatrix();
+                rendererPre.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
+
+        // Initialize preloader immediately
+        initPreloader();
+
+        // --- MAIN SITE LOGIC ---
+        let bgMaterial;
+        function startMainSite() {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Re-run hero text for slide 0 now that site is visible
+            animateHeroText(0);
+
+            const container = document.getElementById('liquid-canvas-container');
+            const scene = new THREE.Scene();
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+            
+            const video = document.createElement('video');
+            video.src = 'https://assets.zyrosite.com/dWxL2je49ks9BZq5/6786688_assistance_body_1280x720-EZSxCiSbSX85pgJt.mp4';
+            video.loop = video.muted = video.autoplay = true; video.crossOrigin = "anonymous"; video.setAttribute('webkit-playsinline', 'true'); video.setAttribute('playsinline', 'true'); video.play();
+            const videoTexture = new THREE.VideoTexture(video); videoTexture.minFilter = THREE.LinearFilter;
+
+            const loader = new THREE.TextureLoader(); loader.setCrossOrigin('anonymous');
+            const textures = [videoTexture, loader.load('https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop'), loader.load('https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?q=80&w=2069&auto=format&fit=crop')];
+            textures.forEach(t => t.minFilter = THREE.LinearFilter);
+
+            bgMaterial = new THREE.ShaderMaterial({
+                uniforms: { uTexCurrent: { value: textures[0] }, uTexNext: { value: textures[1] }, uMix: { value: 0.0 }, uZoom: { value: 1.0 }, uPan: { value: new THREE.Vector2(0, 0) } },
+                vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }`,
+                fragmentShader: `uniform sampler2D uTexCurrent; uniform sampler2D uTexNext; uniform float uMix; uniform float uZoom; uniform vec2 uPan; varying vec2 vUv; void main() { vec2 uv = (vUv - 0.5) * uZoom + 0.5 + uPan; gl_FragColor = mix(texture2D(uTexCurrent, uv), texture2D(uTexNext, uv), uMix); }`
+            });
+            scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), bgMaterial));
+
+            const animateMain = () => {
+                const t = performance.now() * 0.001;
+                bgMaterial.uniforms.uZoom.value = 1.0 - (0.05 * Math.sin(t * 0.1));
+                bgMaterial.uniforms.uPan.value.set(0.01 * Math.cos(t * 0.15), 0.01 * Math.sin(t * 0.15));
+                renderer.render(scene, camera); requestAnimationFrame(animateMain);
+            };
+            animateMain();
+
+            const lenis = new Lenis({ duration: 1.2, smooth: true });
+            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); } requestAnimationFrame(raf);
+
+            // Slideshow Logic
+            let currentIdx = 0;
+            const slideEls = [document.getElementById('slide-1'), document.getElementById('slide-2'), document.getElementById('slide-3')];
+            setInterval(() => {
+                const prev = currentIdx; currentIdx = (currentIdx + 1) % 3;
+                if(bgMaterial) {
+                    bgMaterial.uniforms.uTexCurrent.value = textures[prev]; 
+                    bgMaterial.uniforms.uTexNext.value = textures[currentIdx];
+                    gsap.fromTo(bgMaterial.uniforms.uMix, { value: 0 }, { value: 1, duration: 1.5, ease: "power2.inOut" });
+                }
+                gsap.to(slideEls[prev], { autoAlpha: 0, duration: 0.5 });
+                gsap.set(slideEls[currentIdx], { autoAlpha: 1 }); animateHeroText(currentIdx);
+            }, 6000);
+
+            // Stack Trigger
+            const cards = gsap.utils.toArray('.stack-card');
+            cards.forEach((card, i) => gsap.set(card, { zIndex: 10 + i }));
+            gsap.from(".stack-header .foundations-anim", { y: 30, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: "#stack-trigger", start: "top 80%" }});
+            gsap.from(".stack-header .animate-help-title", { y: 50, opacity: 0, duration: 1.2, delay: 0.2, ease: "power3.out", scrollTrigger: { trigger: "#stack-trigger", start: "top 80%" }});
+
+            const stackTl = gsap.timeline({
+                scrollTrigger: { trigger: "#stack-trigger", start: "top top", end: () => `+=${cards.length * 100}%`, pin: true, scrub: 1, anticipatePin: 1 }
+            });
+
+            cards.forEach((card, i) => {
+                const title = card.querySelector('.stack-title');
+                const problem = card.querySelector('.stack-problem');
+                const outcome = card.querySelector('.stack-outcome');
+                const splitTitle = new SplitType(title, { types: 'chars' });
+                if (i > 0) {
+                    stackTl.to(card, { y: 0, duration: 1, ease: "none" }, i - 0.5);
+                    stackTl.to(cards[i-1], { scale: 0.9, opacity: 0.3, filter: "blur(10px)", duration: 1, ease: "none" }, i - 0.5);
+                    stackTl.from(problem, { x: -30, opacity: 0, duration: 0.4 }, i - 0.3);
+                    stackTl.from(splitTitle.chars, { y: 20, opacity: 0, filter: "blur(5px)", stagger: 0.02, duration: 0.5 }, i - 0.2);
+                    stackTl.from(outcome, { y: 20, opacity: 0, duration: 0.5 }, i - 0.1);
+                } else {
+                    gsap.set(card, { y: 0 });
+                    stackTl.from(problem, { x: -30, opacity: 0, duration: 0.4 }, 0.1);
+                    stackTl.from(splitTitle.chars, { y: 20, opacity: 0, filter: "blur(5px)", stagger: 0.02, duration: 0.5 }, 0.2);
+                    stackTl.from(outcome, { y: 20, opacity: 0, duration: 0.5 }, 0.3);
                 }
             });
 
-            ScrollTrigger.refresh();
-        });
+            // Horizontal Track
+            const track = document.querySelector('.horizontal-track');
+            const hCards = gsap.utils.toArray('.horizontal-card');
+            const horizontalTl = gsap.timeline({
+                scrollTrigger: { trigger: ".horizontal-section", start: "top top", end: () => `+=${track.scrollWidth - window.innerWidth}`, scrub: 1, pin: true, anticipatePin: 1 }
+            });
+            horizontalTl.to(track, { x: () => -(track.scrollWidth - window.innerWidth), ease: "none" });
+
+            // Initialize Nav
+            const headerNav = document.getElementById('main-header');
+            const triggers = document.querySelectorAll('.menu-trigger');
+            let activeMenu = null;
+            triggers.forEach(trig => {
+                trig.addEventListener('mouseenter', () => {
+                    const targetId = trig.getAttribute('data-target');
+                    const target = document.getElementById(targetId);
+                    if (!target || activeMenu === target) return;
+                    gsap.to(headerNav, { height: 140, borderRadius: 40, duration: 0.5, ease: "power4.out" });
+                    if (activeMenu) { gsap.set(activeMenu, { autoAlpha: 0, y: -10, display: 'none' }); activeMenu.classList.remove('active'); }
+                    target.style.display = 'flex'; target.classList.add('active');
+                    gsap.fromTo(target, { autoAlpha: 0, y: 15 }, { autoAlpha: 1, y: 0, duration: 0.3 });
+                    activeMenu = target;
+                });
+            });
+            headerNav.addEventListener('mouseleave', () => {
+                gsap.to(headerNav, { height: 70, borderRadius: 50, duration: 0.5 });
+                if(activeMenu) { gsap.to(activeMenu, { autoAlpha: 0, duration: 0.2, onComplete: () => { activeMenu.style.display = 'none'; activeMenu.classList.remove('active'); activeMenu = null; }}); }
+            });
+
+            // Parallax Testimonial
+            gsap.to("#parallax-bg", { y: "15%", scrollTrigger: { trigger: ".testimonial-section", start: "top bottom", end: "bottom top", scrub: true }});
+
+            // Journey Path
+            const jPath = document.getElementById('journey-progress-path');
+            const jContainer = document.getElementById('journey-trigger');
+            if(jPath && jContainer) {
+                jPath.setAttribute('d', `M 2 0 L 2 ${jContainer.scrollHeight}`);
+                const jPathLen = jPath.getTotalLength();
+                gsap.set(jPath, { strokeDasharray: jPathLen, strokeDashoffset: jPathLen });
+                gsap.to(jPath, { strokeDashoffset: 0, scrollTrigger: { trigger: "#journey-trigger", start: "top center", end: "bottom center", scrub: 1 }});
+            }
+
+            // Reveal Transition
+            const revealTl = gsap.timeline({ scrollTrigger: { trigger: "#teeth-trigger", start: "top top", end: "+=150%", pin: true, scrub: 1 }});
+            revealTl.to("#tooth-t", { yPercent: -101 }, 0).to("#tooth-b", { yPercent: 101 }, 0);
+        }
+
+        function animateHeroText(idx) {
+            const slideEls = [document.getElementById('slide-1'), document.getElementById('slide-2'), document.getElementById('slide-3')];
+            const s = slideEls[idx];
+            if(!s) return;
+            const charSplit = new SplitType(s.querySelector('.slide-text'), { types: 'chars' });
+            const aside = s.querySelector('.hero-aside p');
+            const btn = s.querySelector('.anim-btn');
+            const tl = gsap.timeline();
+            tl.from(charSplit.chars, { opacity: 0, y: 50, filter: "blur(15px)", stagger: 0.03, duration: 1.2, ease: "power4.out" })
+              .fromTo(aside, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, filter: "blur(0px)" }, "-=0.8")
+              .from(btn, { opacity: 0, scale: 0.9, duration: 1 }, "-=0.6");
+        }
     </script>
 </body>
 </html>
